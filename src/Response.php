@@ -11,26 +11,47 @@ namespace phpapi;
 
 
  class Response {
- 	public $_body = '';
- 	public function __construct() {
-		
 
+	protected $data = [];
+
+	// 外包装
+	protected $dataWrapper = array('data' => []);
+	 
+	public function __construct() {
+		
  	}
 
  	public function __destruct() {
 
+	}
+	 
+	protected function setHeaders() {
+		@header('Content-type: application/json;charset=utf-8');
+	}
+
+	protected function getHeaders() {
+
+	}
+
+	protected function security() {
+		
+	}
+
+	protected function getBody() {
+		// @todo
+		$retCode = array('ret' => 200, 'msg' => 'succ');
+		$result = array_merge($retCode,$this->dataWrapper);
+        echo json_encode($result);
  	}
 
- 	public function get_body() {
-        // return $this->_body;
-        @header('Content-type: application/json;charset=utf-8');
-        $res = array('ret' => 200, 'msg' => 'succ');
-        echo json_encode($res);
- 	}
-
- 	public function set_body($res) {
- 		if(empty($this->_body)) {
- 			$this->_body = $res;
- 		}
- 	}
+ 	public function setBody($data = [], ...$params) {
+		// @todo request处理 
+		$this->data = $data;
+		$this->dataWrapper['data'] = $data;
+	 }
+	 
+	public function output() {
+		$this->setHeaders();
+		$this->getBody();
+	}
  }

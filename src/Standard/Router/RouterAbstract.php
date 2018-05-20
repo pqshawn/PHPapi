@@ -22,8 +22,8 @@ abstract class RouterAbstract implements RouterInterface{
      * }
      */
     protected $mapper = [
-        'namespace' => 'app',
-        'controller' => 'v1/Test',
+        'namespace' => 'App/V1/Api',
+        'controller' => 'Test',
         'action' => 'get',
     ];
     // 当前路由的模式
@@ -42,7 +42,7 @@ abstract class RouterAbstract implements RouterInterface{
         $match = array(); // 捕获1
         $mapperRes = '';
         // 不管是dot还是pathinfo统一解析出相应参数
-        if (isset($_SERVER['REQUEST_URI'])) {
+        if (isset($_SERVER['REQUEST_URI']) && $_SERVER['REQUEST_URI'] != '/') {
             $requestUri = $_SERVER['REQUEST_URI'];
         } else {
             return $this->mapper;

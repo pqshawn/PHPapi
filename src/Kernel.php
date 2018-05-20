@@ -16,7 +16,15 @@ class Kernel {
 	 */
 	private static $_single_obj = array();
 
+	public function __construct() {
+		\PhpApi\Di::single()->router = '\\PhpApi\\Router\\RouterFactory';
+	}
+
 	public static function dispatch() {
+		$router = \PhpApi\Di::single()->router;
+        $routerInstance = $router->load();
+        $ret = $routerInstance->dispatch(true);
+		
 		// Di()->request->parseRequest();
 
 		// try{
@@ -51,6 +59,7 @@ class Kernel {
 		
 		return self::$_single_obj[$md5Key];
 	}
+
 
 }
 

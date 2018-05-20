@@ -19,7 +19,8 @@
     "autoload": {
         "psr-4": {
             "PhpApi\\":"src/",
-            "App\\": "application/app/"
+            "App\\":"application/app/",
+            "Ischool\\":"application/ischool/"
         },
         "files": [
             "src/Helper.php"

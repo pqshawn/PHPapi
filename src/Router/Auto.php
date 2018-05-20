@@ -35,6 +35,7 @@ class Auto extends RouterAbstract {
      * @return void
      */
 	public function dispatch() {
+        $data = [];
         // 解析到类变量
         $this->parse();
         // 路由转向
@@ -45,7 +46,13 @@ class Auto extends RouterAbstract {
         if (!method_exists($controller, $actionName) || !is_callable(array($controller, $actionName))) {
             // 异常处理
         } else {
-            $controller->$actionName();
+            // 前置方法
+
+            $data = $controller->$actionName();
+            
+            // 后置方法
         }
+        // 输出
+        $controller->output($data);
 	}
 }

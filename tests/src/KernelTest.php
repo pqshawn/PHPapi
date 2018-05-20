@@ -129,7 +129,7 @@ class KernelTest extends \PHPUnit\Framework\TestCase {
      * 测试response工厂
      */
     public function testResponse() {
-        $response = \PhpApi\Di::single()->response->get_body();
+        $response = \PhpApi\Di::single()->response->getBody();
         $this->expectOutputRegex('/"ret":200/');
     }
 
