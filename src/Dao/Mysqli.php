@@ -91,6 +91,7 @@ final class Mysqli implements ModelInterface {
 		
 		if($rs = mysqli_query($db_link, $sql)) {
 			$db_res = array('rs' => $rs, 'sql' => $sql);
+			
 			return $db_res;
 		} else {
 			trigger_error('SQL:'.mysqli_errno($db_link).' in '.$sql, E_USER_WARNING);

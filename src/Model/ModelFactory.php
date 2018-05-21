@@ -18,6 +18,11 @@ abstract class ModelFactory implements FactoryInterface, ModelInterface {
 	public $_db_prefix = '';
 	public $_db = '';
 	public function __construct($confDb = array()) {
+		$this->init($confDb);
+	}
+
+	public function init($confDb = array()) {
+		if (empty($confDb)) return null;
 		if (isset($confDb['type'])) {
 			$this->_db_driver = $dbDriver = $confDb['type'];
 			$db_driver = ucfirst($dbDriver);

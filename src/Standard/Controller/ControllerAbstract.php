@@ -8,7 +8,7 @@ namespace PhpApi\Standard\Controller;
  * @author:Shawn Yu <pggq@outlook.com>
  */
 
- class ControllerAbstract implements ControllerInterface{
+ abstract class ControllerAbstract implements ControllerInterface{
 
     /**
      * 

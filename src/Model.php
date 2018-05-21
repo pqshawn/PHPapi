@@ -18,9 +18,26 @@ class Model extends ModelFactory {
 	public $_db = '';
 	public $_table = '';
 	public function __construct($ori = false, $config = array()) {
-		parent::__construct($config);
+		$this->init($ori, $config);
+	}
+
+	/**
+	 * model 手动初始化
+	 */
+	public function init($ori = false, $config = array()) {
+		if (empty($config)) {
+			// 加载配置
+			$configObj = Di::single()->config;
+			$configApp = $configObj->config;
+			$appName = $configObj->appName;
+			// 更多扩展，更多支持 @todo
+			$config = $configApp[$appName]['Db']['Master'];
+		}
+		parent::init($config);
+		// 自动计算表名
 		if(!$ori) {
 			$this->_table = $this->table();
+			if(!$this->_table) trigger_error('Table name is error');
 		}
 	}
 
@@ -46,10 +63,13 @@ class Model extends ModelFactory {
 		$sql = "SELECT {$cols} FROM ".$this->_table;
 		$where = $this->where($where);
 		$order = $this->order($order);
-		($offset > 0)? $offset = $offset:$offset = 0;
-		($limit > 0)? $limit = $limit:$limit = 18446744073709551615;
-		$lim = " limit {$offset},{$limit}";
-                $sql .= $where . $order . $lim;
+		// offset,limit 不给默认值，防止误会，但是系统最大值，希望开发者自己设限，防止大表长时间等待
+		if ($offset >= 0 && $limit > 0) {
+			$lim = " limit {$offset},{$limit}";
+		} elseif ($limit > 0) {
+			$lim = " limit {$limit}";
+		}
+        $sql .= $where . $order . $lim;
 
 		$data = $this->_db->select($sql);
 		return $data;
@@ -63,8 +83,8 @@ class Model extends ModelFactory {
 	public function table($table_name = null) {
 		if(empty($table_name)){
 			$ex_res = $this->classExplode(get_class($this));
-			$table = array_shift($ex_res);
-			$table_name = $this->_db_prefix.lcfirst($table);
+			$table = implode('_', $ex_res);
+			$table_name = $this->_db_prefix.strtolower($table);
 		}
 		$res = parent::table($table_name);
 		if(!$res) trigger_error('Table name is null or no exist!', E_USER_WARNING);

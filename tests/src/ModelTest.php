@@ -67,11 +67,13 @@ class ModelTest extends \PHPUnit\Framework\TestCase {
         // 测试test表
         self::$model->_table = 'test';
         $data = array(
-            'title'   => 'first title',
-            'content' => 'first content'
+            'title'   => 'second title',
+            'content' => 'second content'
         );
         $result = self::$model->create($data);
-        $this->assertGreaterThan(-1, $result);
+        $ret = isset($result['rs'])? $result['rs'] : false;
+        $this->assertTrue($ret);
+        // $this->assertGreaterThan(-1, $result);
     }
 
     /**
