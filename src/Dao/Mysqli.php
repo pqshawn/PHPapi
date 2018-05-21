@@ -1,17 +1,35 @@
 <?php
+namespace PhpApi\Dao;
+
+use PhpApi\Standard\Model\ModelInterface;
+
 /**
- * mysql driver
+ * mysqli driver
  * 
  * @copyright (c)Ldos.net All rights reserved.
  * @author:Yzwu <Ldos.net>
  */
 
-final class MysqlDbLib implements DbInterfaceLib {
+final class Mysqli implements ModelInterface {
 	private $_link_res = '';
 	private $_connect_type = '';
-
+	private $_db_config = array();
+	
 	public function __construct() {
 
+	}
+
+	/**
+	 * set config
+	 */
+	public function setConfig($conf = array()) {
+		$this->_db_config = array(
+			'host' => isset($conf['host'])? $conf['host'] : '',
+			'user' => isset($conf['user'])? $conf['user'] : '',
+			'pwd' => isset($conf['password'])? $conf['password'] : '',
+			'name' => isset($conf['db'])? $conf['db'] : '',
+			'charset' => isset($conf['charset'])? $conf['charset'] : ''
+		);
 	}
 
 	private function user_connect($db_config = array(), $new_link = true) {
@@ -24,37 +42,16 @@ final class MysqlDbLib implements DbInterfaceLib {
 	public function _connect($db_config = array(), $new_link = false) {
 		$db_link = '';
 		if(empty($db_config)) {
-			$db_config = array('host' => DB_HOST,
-							   'user' => DB_USER,
-							   'pwd' => DB_PWD,
-							   'name' => DB_NAME,
-							);
+			$db_config = $this->_db_config;
 		}
+		
+		$db_link = mysqli_connect($db_config['host'], $db_config['user'], $db_config['pwd'], $db_config['name']);
 
-		$conn_flag = false;
-		if(defined(DB_PERSISTENT_CONNECT)) {
-			if(DB_PERSISTENT_CONNECT === 1) {
-				$db_link = mysql_pconnect($db_config['host'], $db_config['user'], $db_config['pwd']);
-			} else {
-				$conn_flag = true;	
-			}
-		} else {
-			$conn_flag = true;
-		}
-		if($conn_flag) { 
-			if($new_link) {
-				$db_link = mysql_connect($db_config['host'], $db_config['user'], $db_config['pwd'], true);
-			} else {
-				$db_link = mysql_connect($db_config['host'], $db_config['user'], $db_config['pwd']);
-			}
-			
-		}
 		if(!$db_link) {
 			trigger_error('Cannot connect the Database!', E_USER_WARNING);
 		}
-		mysql_select_db($db_config['name'], $db_link);
-		if(defined('DB_CHARSET')) {
-			mysql_query('SET NAMES \''.DB_CHARSET.'\'', $db_link);
+		if(isset($db_config['charset'])) {
+			mysqli_query($db_link, 'SET NAMES \''.$db_config['charset'].'\'');
 		}
 		$this->_link_res = $db_link;
 		return $db_link;
@@ -67,11 +64,12 @@ final class MysqlDbLib implements DbInterfaceLib {
 		$db_link = $this->_link_res;
 		$rs = $this->exec($sql, $db_link, $new_link);
 		$data = array();
+
 		if($rs['rs']) {
-			while($row = mysql_fetch_assoc($rs['rs'])) {
+			while($row = mysqli_fetch_assoc($rs['rs'])) {
 				$data[] = $row;
 			}
-			mysql_free_result($rs['rs']);
+			mysqli_free_result($rs['rs']);
 			return $data;
 		} else {
 			return false;
@@ -79,22 +77,23 @@ final class MysqlDbLib implements DbInterfaceLib {
 	}
 
 	public function create($sql) {}
-	public function update() {}
-	public function retrieve() {}
-	public function delete() {
+	public function update($sql) {}
+	public function retrieve($sql) {}
+	public function delete($sql) {
 
 	}
 
 	public function exec($sql, $db_link = false, $new_link = false) {
+		
 		if(!is_resource($this->_link_res) || !is_resource($db_link)) {
 			$db_link = $this->user_connect('', $new_link);
 		}
 		
-		if($rs = mysql_query($sql, $db_link)) {
+		if($rs = mysqli_query($db_link, $sql)) {
 			$db_res = array('rs' => $rs, 'sql' => $sql);
 			return $db_res;
 		} else {
-			trigger_error('SQL:'.mysql_errno($db_link).' in '.$sql, E_USER_WARNING);
+			trigger_error('SQL:'.mysqli_errno($db_link).' in '.$sql, E_USER_WARNING);
 			return false;
 		}
 	}
@@ -104,7 +103,8 @@ final class MysqlDbLib implements DbInterfaceLib {
 	public function rollback() {}
 
 	public function quote($string){
-		$result = mysql_escape_string($string);
+
+		$result = @mysqli_real_escape_string($this->_link_res, $string);
         if(!$result){
             $result = addslashes($string);
         }
@@ -125,4 +125,3 @@ final class MysqlDbLib implements DbInterfaceLib {
 		return true;
 	}
 }
-

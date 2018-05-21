@@ -1,16 +1,24 @@
 <?php
+namespace PhpApi;
+
+use PhpApi\Model\ModelFactory;
+
+use PhpApi\Di;
+
 /**
  * base model
  * structure SQL, structure DATA
+ * assume the ORM-base, ORM base it and makes the class about DB which more stronger later 
+ * 
  * @copyright (c)Ldos.net All rights reserved.
- * @author:Yzwu <Ldos.net>
+ * @author Shawn Yu <Ldos.net>
  */
 
-class ModelLib extends DbFactoryLib implements ModelInterfaceLib {
+class Model extends ModelFactory {
 	public $_db = '';
 	public $_table = '';
-	public function __construct($ori = false) {
-		parent::__construct();
+	public function __construct($ori = false, $config = array()) {
+		parent::__construct($config);
 		if(!$ori) {
 			$this->_table = $this->table();
 		}
@@ -54,7 +62,7 @@ class ModelLib extends DbFactoryLib implements ModelInterfaceLib {
 
 	public function table($table_name = null) {
 		if(empty($table_name)){
-			$ex_res = NutrientLib::class_explode(get_class($this));
+			$ex_res = $this->classExplode(get_class($this));
 			$table = array_shift($ex_res);
 			$table_name = $this->_db_prefix.lcfirst($table);
 		}
@@ -121,6 +129,17 @@ class ModelLib extends DbFactoryLib implements ModelInterfaceLib {
 	public function exec($data) {
 		$res = parent::create($data);
 		return $res;
+	}
+
+	public static function classExplode($class_name) {
+		$nspace = $class_name;
+		$nspace_path = str_replace('\\', '/', $nspace);
+		$nspace_arr = explode('/', $nspace_path);
+		if(count($nspace_arr) > 1) {
+			$class_name = array_pop($nspace_arr);
+		}
+		$ex_res = preg_split("/(?=[A-Z])/", $class_name, 0, PREG_SPLIT_NO_EMPTY);
+		return $ex_res;
 	}
 
 }
