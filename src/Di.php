@@ -1,7 +1,7 @@
 <?php
 namespace PhpApi;
 
-use PhpApi\Standard\DependenceInjection;
+use PhpApi\Standard\DependenceIn;
 
 /**
  * 依赖注入类
@@ -11,7 +11,7 @@ use PhpApi\Standard\DependenceInjection;
  * @author:Shawn Yu <pggq@outlook.com>
  */
 
-class Di extends DependenceInjection {
+class Di extends DependenceIn {
 
     /**
 	 * @param object $instance 
@@ -30,8 +30,7 @@ class Di extends DependenceInjection {
     protected $response = [];
 
     public function __construct() {
-        $this->request = '\\PhpApi\\Request';
-        $this->response = '\\PhpApi\\Response';
+        
     }
 
     /**

@@ -1,13 +1,13 @@
 <?php
 namespace PhpApi;
 
-use PhpApi\Helper;
+
 /**
  * 主启动类
  * kernel启动
  *
  * @copyright (c)Ldos.net All rights reserved.
- * @author:Shawn Yu <pggq@outlook.com>
+ * @author Shawn Yu <pggq@outlook.com>
  */
 
 class Kernel {
@@ -20,6 +20,22 @@ class Kernel {
 		\PhpApi\Di::single()->router = '\\PhpApi\\Router\\RouterFactory';
 	}
 
+	/**
+	 * 注入式配置
+	 * 
+	 * @param string $rootDir
+	 * 
+	 * @return void
+	 */
+	public static function config($configDir = '', $appName = 'App') {
+		\PhpApi\Di::single()->config = new \PhpApi\Config($configDir);
+		\PhpApi\Di::single()->config->main($appName);
+	}
+
+
+	/**
+	 * 分发器
+	 */
 	public static function dispatch() {
 		$router = \PhpApi\Di::single()->router;
         $routerInstance = $router->load();

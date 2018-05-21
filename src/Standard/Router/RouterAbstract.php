@@ -15,16 +15,16 @@ abstract class RouterAbstract implements RouterInterface{
      * 提供一个正常可以解析的mapper
      * 
      * @var mapper array{
-     * 'namespace' => '',
+     * 'appName' => '',
      * 'controller' => '',
      * 'action' => '',
      * 'getParam' => '',
      * }
      */
     protected $mapper = [
-        'namespace' => 'App/V1/Api',
-        'controller' => 'Test',
-        'action' => 'get',
+        'appName' => 'App',
+        'controller' => 'App/V1/Api/Test',
+        'action' => 'get'
     ];
     // 当前路由的模式
     protected $currentMode = '';
@@ -32,8 +32,8 @@ abstract class RouterAbstract implements RouterInterface{
     /**
      * 解析路由
      * 解析出controller action  如果有param，加上param
-     * view-source:http://192.168.1.37/app/v1/News/add?gewew=gew3
-     * view-source:http://192.168.1.37/app.v1.News.Dw.dsw?gewew=gew3
+     * view-source:http://192.168.1.37/app/v1/api/test/get?gewew=gew3
+     * view-source:http://192.168.1.37/app.v1.api.test.get?gewew=gew3
      * 
      * @param void
      * @return void
@@ -56,11 +56,11 @@ abstract class RouterAbstract implements RouterInterface{
             array_walk($mapperArray, array($this, 'routerUcfirst'));
         }
         if(count($mapperArray) > 2) {
-            $this->mapper['namespace'] = array_unshift($mapperArray);
+            $this->mapper['appName'] = array_shift($mapperArray);
             $this->mapper['action'] =array_pop($mapperArray);
         }
         // controller
-        $this->mapper['controller'] = $this->mapper['namespace'] . implode('\\', $mapperArray);
+        $this->mapper['controller'] = $this->mapper['appName'] . '\\' . implode('\\', $mapperArray);
         $this->mapper['getParam'] = isset($_SERVER['QUERY_STRING'])? $_SERVER['QUERY_STRING'] : '';
         $this->currentMode = $this->mode();
     }
@@ -73,7 +73,7 @@ abstract class RouterAbstract implements RouterInterface{
     
     protected function routerUcfirst(&$item, $key)
     {
-        return ucfirst($item);
+        $item = ucfirst($item);
     }
 
     /**

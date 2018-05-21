@@ -24,6 +24,18 @@ class Auto extends RouterAbstract {
      * 解析路由
      */
     public function parse() {
+        // 项目自定义默认路由, 验证@todo
+        if (!isset($_SERVER['REQUEST_URI']) || $_SERVER['REQUEST_URI'] == '/') {
+            $configObj = \PhpApi\Di::single()->config;
+            $config = $configObj->config;
+            $appName = $configObj->appName;
+            
+            if (isset($config[$appName]['Default']) && md5(json_encode(array_keys($config[$appName]['Default']))) == '1c4c4d78a945d9cd8496d7b214c4ec03') {
+                $this->mapper = $config[$appName]['Default'];
+                return $this->mapper;
+            }
+        }
+
         return parent::parse();
     }
 
@@ -39,7 +51,7 @@ class Auto extends RouterAbstract {
         // 解析到类变量
         $this->parse();
         // 路由转向
-        $controllerName = '\\' . str_replace('/', '\\', $this->mapper['namespace'] . '\\' . $this->mapper['controller']);
+        $controllerName = '\\' . str_replace('/', '\\', $this->mapper['controller']);
         $actionName = $this->mapper['action'];
 
         $controller = new $controllerName();

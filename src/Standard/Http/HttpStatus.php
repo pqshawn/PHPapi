@@ -17,7 +17,7 @@ namespace PhpApi\Standard\Http;
  */
 
  class HttpStatus {
-     protected $httpStatus = 
+     protected static $httpStatus = 
      array(
          '200' => array('message' => 'OK'),
          '204' => array('message' => 'No Content'),

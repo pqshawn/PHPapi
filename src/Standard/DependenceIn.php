@@ -15,7 +15,7 @@ use Closure;
  * @author:Shawn Yu <pggq@outlook.com>
  */
 
-abstract class DependenceInjection implements ArrayAccess {
+abstract class DependenceIn implements ArrayAccess {
 
     /**
      * 对象资源集合

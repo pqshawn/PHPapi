@@ -16,10 +16,23 @@ class Controller extends ControllerAbstract {
 	use MiddlewareTraits;
 	
 	protected $_vars = array();
+
 	public function __construct() {
-		Di::single()->request = '\\PhpApi\\Request';
-		Di::single()->response = '\\PhpApi\\Response';
+		
+		$this->init();
+
 	}
+
+	/**
+	 * 配置预处理
+	 */
+	public function init() {
+		\PhpApi\Di::single()->request = '\\PhpApi\\Request';
+		\PhpApi\Di::single()->response = '\\PhpApi\\Response';
+
+
+	}
+
 
 	/**
 	 * 输出类
