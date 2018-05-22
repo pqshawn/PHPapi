@@ -10,9 +10,10 @@
 
  return array(
 
-    'success' => 'success',
-    'failure' => 'failure',
-    'error'   => 'error',
-
+    'SUCCESS' => 'success',
+    'FAILURE' => 'failure',
+    'ERROR'   => 'error',
+    'NO_METHOD' => 'no method',
+    'INVALID_ARGUMENT' => 'invalid argument',
 
  );

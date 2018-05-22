@@ -11,6 +11,12 @@ namespace PhpApi\Standard\Controller;
  abstract class ControllerAbstract implements ControllerInterface{
 
     /**
-     * 
+     * 前置方法
      */
+    abstract public function beforeAction();
+
+    /**
+     * 后置方法
+     */
+    abstract public function afterAction();
  }

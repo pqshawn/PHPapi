@@ -41,11 +41,11 @@ namespace PhpApi;
 		$result = $this->dataWrapper;
 
 		if (!isset($this->dataWrapper['ret'])) {
-			$retCode = array('ret' => 200, 'msg' => 'succ');
+			$retCode = array('ret' => 200, 'msg' => 'success');
 			$result = array_merge($retCode,$this->dataWrapper);
 		}
 
-        echo json_encode($result);
+		echo json_encode($result);
  	}
 
  	public function setBody($data = [], ...$params) {
@@ -57,17 +57,23 @@ namespace PhpApi;
 		$lang = $configObj->lang;
 		$codeStatus = $configObj->codeStatus;
 		$appName = $configObj->appName;
-
-		if (isset($data['ret']) && is_string($data['ret'])) {
+		if(isset($data['ret']) && is_int($data['ret'])) {
+			$this->dataWrapper = $data;
+			return true;
+		}
+		elseif (isset($data['retKey']) && is_string($data['retKey'])) {
 			// 重新定义错误码
-			if (isset($codeStatus[$appName][$data['ret']])) {
-				$this->dataWrapper['ret'] = $codeStatus[$appName][$data['ret']];
+			if (isset($codeStatus[$appName][$data['retKey']])) {
+				$this->dataWrapper['ret'] = $codeStatus[$appName][$data['retKey']];
+			} // 系统的错误码找下
+			elseif (isset($codeStatus[$data['retKey']])) {
+				$this->dataWrapper['ret'] = $codeStatus[$data['retKey']];
 			}
 			// 重新定义消息
-			if (isset($lang[$data['ret']])) {
-				$this->dataWrapper['msg'] = $lang[$data['ret']] ;
+			if (isset($lang[$data['retKey']])) {
+				$this->dataWrapper['msg'] = $lang[$data['retKey']] ;
 			}
-			unset($data['ret']);
+			unset($data['retKey']);
 		}
 
 		$this->dataWrapper['data'] = $data;

@@ -47,7 +47,11 @@ class Config {
     /**
      * 错误码
      */
-    public $codeStatus = [];
+    public $codeStatus = [
+        'EXCEPTION' => 0,
+        'SUCCESS' => 200,
+        'NO_METHOD' => 404,
+    ];
 
     /**
      * 用户自定义配置
@@ -103,7 +107,7 @@ class Config {
         $langName = isset($this->config[$appName]['Land'])? $this->config[$appName]['Land'] : 'zh_cn';
 
         // 加载系统语言包
-        $langPacket =  dirname(__FILE__) . DIRECTORY_SEPARATOR . 'Lang' . $langName . '.php';
+        $langPacket =  dirname(__FILE__) . DIRECTORY_SEPARATOR . 'Lang' . DIRECTORY_SEPARATOR . $langName . '.php';
         if (is_file($langPacket)) {
             $this->lang = @include($langPacket);
         }
@@ -135,7 +139,10 @@ class Config {
         // 加载系统语言包
         $codeStatusFile =  $this->configDir . DIRECTORY_SEPARATOR . $fileName . '.php';
         if (is_file($codeStatusFile)) {
-            $this->codeStatus = @include($codeStatusFile);
+            $codeStatus = @include($codeStatusFile);
+            if (is_array($codeStatus)) {
+                $this->codeStatus = array_merge($codeStatus, $this->codeStatus);
+            }
         }
     }
 

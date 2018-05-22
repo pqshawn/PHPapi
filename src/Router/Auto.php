@@ -56,13 +56,15 @@ class Auto extends RouterAbstract {
 
         $controller = new $controllerName();
         if (!method_exists($controller, $actionName) || !is_callable(array($controller, $actionName))) {
-            // 异常处理
+            // 异常处理, 可抛异常处理，这里我们先借用http 400统一展示
+            $data = array('retKey' => 'NO_METHOD');
         } else {
             // 前置方法
-
+            $controller->beforeAction();
             $data = $controller->$actionName();
             
             // 后置方法
+            $controller->afterAction();
         }
         // 输出
         $controller->output($data);

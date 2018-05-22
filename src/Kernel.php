@@ -28,6 +28,9 @@ class Kernel {
 	 * @return void
 	 */
 	public static function config($configDir = '', $appName = 'App') {
+		// 自定义捕获编译错误（php7.3之前部分）
+		error_reporting(~E_PARSE);
+
 		\PhpApi\Di::single()->config = new \PhpApi\Config($configDir);
 		\PhpApi\Di::single()->config->main($appName);
 	}
@@ -37,22 +40,18 @@ class Kernel {
 	 * 分发器
 	 */
 	public static function dispatch() {
-		$router = \PhpApi\Di::single()->router;
-        $routerInstance = $router->load();
-        $ret = $routerInstance->dispatch(true);
-		
-		// Di()->request->parseRequest();
+		try{
+			set_error_handler(array('\PhpApi\Exception', 'user_error_handler'));
+			register_shutdown_function(array('\PhpApi\Exception', 'callRegisteredShutdown'));
 
-		// try{
-		// 	//config
-		// 	//router
-		// 	$router_pc = RouterFactoryLib::load();
-		// 	$router_pc->dispatch();
-		// } catch(Exception $e) {
-		// 	self::user_exception_handle($e);
-		// 	// echo 'Message: ' .$e->getMessage();
-		// }
-
+			$router = \PhpApi\Di::single()->router;
+			$routerInstance = $router->load();
+			
+			$routerInstance->dispatch(true);
+			
+		} catch (\Exception $e) {
+			\PhpApi\Exception::user_exception_handle($e);
+		}
 	}
 	
 	/**
@@ -75,6 +74,9 @@ class Kernel {
 		
 		return self::$_single_obj[$md5Key];
 	}
+
+
+
 
 
 }

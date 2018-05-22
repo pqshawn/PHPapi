@@ -1,12 +1,21 @@
 <?php
 namespace PhpApi;
 
+/**
+ * 异常错误处理类
+ * 
+ * 关闭调试模式时，不可返回给端，应记入系统日志里，或日志服务器，或什么都不做
+ * 
+ * @copyright (c)Ldos.net All rights reserved.
+ * @author Shawn Yu <pggq@outlook.com>
+ */
 
 class Exception {
     public static function user_error_handler($errno, $errstr, $errfile, $errline) {
 		if(!(error_reporting() & $errno)) {
 			return;
 		}
+		
 		$error_type = '';
 		$message = sprintf("(%s)%s in %s on line %s", $errno, $errstr, $errfile, $errline);
 		switch($errno) {
@@ -33,8 +42,16 @@ class Exception {
 				$error_type = 'UNKOWN_ERORR_TYPE';
 				break;
 		}		
-		self::log($error_type.$message);
-		return true;
+		
+		$error = array(
+			'ret' => 0,
+			'msg' => $message,
+			'error_type' => "{$errno} - {$error_type}"
+		);
+		$Di = \PhpApi\Di::single();
+		$Di->response = '\\PhpApi\\Response';
+		$Di::single()->response->setBody($error, []);
+		$Di::single()->response->output();
     }
     
     public static function user_exception_handle($exception) {
@@ -65,5 +82,28 @@ class Exception {
 OUTPUT;
 		echo $output;
 		exit;
+	}
+
+	/**
+	 * 运行时错误 捕获函数
+	 * 1.Fatal error 和 eval()的ParseError错误可以在这里抓到
+	 * (注意：因为error_reporting的关闭可能非影响自定义错误，所以系统并没有error_reporting=0)
+	 * 2.如果异步可以提醒错用中断函数
+	 * 
+	 * 
+	 * 类似 (T_LNUMBER), expecting identifier (T_STRING)  编译性错误还是抓不到，如解决此缺陷则升级到php7.3用try catch解决
+	 * ParseError extends CompileError as of PHP 7.3.0
+	 */
+	public static function callRegisteredShutdown() {
+		error_reporting(0);
+		$last_error = error_get_last();
+		if (isset($last_error['type'])) {
+			
+			print_R($last_error);
+		} else {
+			// 记进其他日志文件或系统，不可抛出或打印
+			
+		}
+		
 	}
 }

@@ -18,7 +18,12 @@ class Model extends ModelFactory {
 	public $_db = '';
 	public $_table = '';
 	public function __construct($ori = false, $config = array()) {
-		$this->init($ori, $config);
+		try {
+			$this->init($ori, $config);
+		} catch (Exception $e) {
+			trigger_error($e.message, E_USER_ERROR);
+		}
+		
 	}
 
 	/**
@@ -31,7 +36,12 @@ class Model extends ModelFactory {
 			$configApp = $configObj->config;
 			$appName = $configObj->appName;
 			// 更多扩展，更多支持 @todo
-			$config = $configApp[$appName]['Db']['Master'];
+			if (isset($configApp[$appName]['Db']['Master'])) {
+				$config = $configApp[$appName]['Db']['Master'];
+			} else {
+				
+				return new Exception('Error config for DB!'); 
+			}
 		}
 		parent::init($config);
 		// 自动计算表名
@@ -87,7 +97,7 @@ class Model extends ModelFactory {
 			$table_name = $this->_db_prefix.strtolower($table);
 		}
 		$res = parent::table($table_name);
-		if(!$res) trigger_error('Table name is null or no exist!', E_USER_WARNING);
+		if(!$res) trigger_error('Table name is null or no exist!', E_USER_ERROR);
 		else return $table_name;
 	}
 

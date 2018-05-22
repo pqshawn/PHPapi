@@ -24,6 +24,14 @@ class Controller extends ControllerAbstract {
 
 	}
 
+	public function beforeAction() {
+
+	}
+
+	public function afterAction() {
+		
+	}
+
 	/**
 	 * 配置预处理
 	 */

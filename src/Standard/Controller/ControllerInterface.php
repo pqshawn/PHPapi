@@ -11,7 +11,13 @@ namespace PhpApi\Standard\Controller;
  interface ControllerInterface {
 
     /**
-     * 
+     * 前置方法
      */
+    function beforeAction();
+
+    /**
+     * 后置方法
+     */
+    function AfterAction();
  }
 

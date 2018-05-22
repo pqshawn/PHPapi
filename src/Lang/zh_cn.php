@@ -10,9 +10,9 @@
 
  return array(
 
-    'success' => '成功',
-    'failure' => '失败',
-    'error'   => '错误',
-
-
+    'SUCCESS' => '成功',
+    'FAILURE' => '失败',
+    'ERROR'   => '错误',
+    'NO_METHOD' => '找不到类或方法',
+    'INVALID_ARGUMENT' => '无效参数',
  );
