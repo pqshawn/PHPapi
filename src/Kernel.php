@@ -28,9 +28,6 @@ class Kernel {
 	 * @return void
 	 */
 	public static function config($configDir = '', $appName = 'App') {
-		// 自定义捕获编译错误（php7.3之前部分）
-		error_reporting(~E_PARSE);
-
 		\PhpApi\Di::single()->config = new \PhpApi\Config($configDir);
 		\PhpApi\Di::single()->config->main($appName);
 	}
@@ -43,7 +40,7 @@ class Kernel {
 		try{
 			set_error_handler(array('\PhpApi\Exception', 'user_error_handler'));
 			register_shutdown_function(array('\PhpApi\Exception', 'callRegisteredShutdown'));
-
+			
 			$router = \PhpApi\Di::single()->router;
 			$routerInstance = $router->load();
 			

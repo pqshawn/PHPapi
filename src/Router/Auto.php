@@ -5,7 +5,7 @@ use PhpApi\Standard\Router\RouterAbstract;
 
 /**
  * normal router
- * for example: http[s]://xxx.xx/V1.Site.Add
+ * for example: http[s]://xxx.xx/app/v1/api/test/get
  * when you choose normal router or no choose
  *
  * @author:Yzwu <Ldos.net>
@@ -54,7 +54,12 @@ class Auto extends RouterAbstract {
         $controllerName = '\\' . str_replace('/', '\\', $this->mapper['controller']);
         $actionName = $this->mapper['action'];
 
-        $controller = new $controllerName();
+        if (class_exists($controllerName)) {
+            $controller = new $controllerName();
+        } else {
+            trigger_error('ControllerName is not exist!');
+        }
+        
         if (!method_exists($controller, $actionName) || !is_callable(array($controller, $actionName))) {
             // 异常处理, 可抛异常处理，这里我们先借用http 400统一展示
             $data = array('retKey' => 'NO_METHOD');

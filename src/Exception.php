@@ -52,6 +52,7 @@ class Exception {
 		$Di->response = '\\PhpApi\\Response';
 		$Di::single()->response->setBody($error, []);
 		$Di::single()->response->output();
+		exit;
     }
     
     public static function user_exception_handle($exception) {
@@ -87,7 +88,7 @@ OUTPUT;
 	/**
 	 * 运行时错误 捕获函数
 	 * 1.Fatal error 和 eval()的ParseError错误可以在这里抓到
-	 * (注意：因为error_reporting的关闭可能非影响自定义错误，所以系统并没有error_reporting=0)
+	 * (注意：因为error_reporting的关闭可能非影响自定义错误，所以系统并没有error_reporting)
 	 * 2.如果异步可以提醒错用中断函数
 	 * 
 	 * 
