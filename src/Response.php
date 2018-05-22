@@ -1,4 +1,6 @@
 <?php
+namespace phpapi;
+
 /**
  * response
  * response the data for net 
@@ -7,11 +9,11 @@
  * @author: Yzwu <distil@163.com>
  */
 
- namespace library;
 
- class ResponseLib {
+ class Response {
  	public $_body = '';
  	public function __construct() {
+		
 
  	}
 
@@ -20,7 +22,10 @@
  	}
 
  	public function get_body() {
- 		return $this->_body;
+        // return $this->_body;
+        @header('Content-type: application/json;charset=utf-8');
+        $res = array('ret' => 200, 'msg' => 'succ');
+        echo json_encode($res);
  	}
 
  	public function set_body($res) {

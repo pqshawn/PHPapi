@@ -1,11 +1,12 @@
 <?php
+namespace PhpApi\Factory;
+
 /**
  * normal router
  * when you choose normal router or no choose
  * @copyright (c)Ldos.net All rights reserved.
- * @author:Yzwu <Ldos.net>
- */
-//namespace library\factory\router;
+ * @author:Shawn Yu <pggq@outlook.com>
+*/
 
 class RouterFactoryLib implements FactoryInterfaceLib {
 
@@ -71,7 +72,6 @@ class RouterFactoryLib implements FactoryInterfaceLib {
 		}
 		//$this->_response->sendhttphead();
 		$response = $this->_response->get_body();
-echo '####################';exit;
 		echo $response;
 	}
 

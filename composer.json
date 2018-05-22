@@ -1,8 +1,11 @@
 {
     "name": "ldos/phpapi",
     "description": "A api framework base on php",
-    "type": "project",
     "license": "BSD-2-Clause",
+    "homepage": "https://www.ldos.net/",
+    "keywords": [
+        "php-api", "php", "api"
+    ],
     "authors": [
         {
             "name": "shawn Yu",
@@ -15,8 +18,11 @@
     },
     "autoload": {
         "psr-4": {
-            "apiTest\\":"src/"
-        }
+            "PhpApi\\":"src/"
+        },
+        "files": [
+            "src/Helper.php"
+        ]
     },
     "config": {
         "secure-http": false

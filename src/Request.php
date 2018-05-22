@@ -1,4 +1,6 @@
 <?php
+namespace phpapi;
+
 /**
  * requst
  * reques the data from net 
