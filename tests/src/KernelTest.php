@@ -49,7 +49,9 @@ class KernelTest extends TestCase {
      * STDOUT
      */
     public function testStdout() {
-
+        $this->markTestIncomplete(
+            __METHOD__.'@todo'
+            );
     }
 
     /**
@@ -57,7 +59,9 @@ class KernelTest extends TestCase {
      * test requestHeader
      */
     public function testRequestHeader() {
-
+        $this->markTestIncomplete(
+            __METHOD__.'@todo'
+            );
     }
 
     /**
@@ -65,7 +69,9 @@ class KernelTest extends TestCase {
      * test requestBody
      */
     public function testRequestBody() {
-
+        $this->markTestIncomplete(
+            __METHOD__.'@todo'
+            );
     }
 
     /**
@@ -74,6 +80,8 @@ class KernelTest extends TestCase {
      */
     public function testRequest() {
         $request = \PhpApi\Di::single()->request;
+        $this->expectOutputRegex('/"ret":200/');
+        $s $request->get_param
         // fwrite(STDOUT,print_R($request, true). "\n");
 
     }
@@ -83,7 +91,9 @@ class KernelTest extends TestCase {
      * test badRequest
      */
     public function testBadRequest() {
-        
+        $this->markTestIncomplete(
+            __METHOD__.'@todo'
+            );
     }
 
     /**
