@@ -12,6 +12,14 @@ namespace PhpApi\Standard\Request\Pool;
 class RequestBody extends RequestDataBase {
 
     /**
+     * 当前在调用的request顶级类
+     */
+    protected $requestObj = null;
+
+    protected function __construct() {
+
+    }
+    /**
      * 处理数据
      */
     public function make() {
@@ -19,12 +27,14 @@ class RequestBody extends RequestDataBase {
         if (empty(self::$bodyData)) {
             $this->parseBodyData();
         }
-
-        $body = self::$bodyData;
-
-        
+        return self::$bodyData;
+    }
 
 
+    /**
+     * 反射数据
+     */
+    public function reflecteData() {
 
     }
 

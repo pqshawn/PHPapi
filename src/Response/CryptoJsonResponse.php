@@ -46,14 +46,14 @@ class CryptoJsonResponse extends ResponseAbstract {
      * 加密适配
      */
     protected function encrypt($cryptObj = null, $res = '') {
-        return $cryptObj->encrypt($res);
+        return $cryptObj->comEncrypt($res);
     }
 
     /**
      * 解密适配
      */
     protected function decrypt($cryptObj = null, $res = '') {
-        return $cryptObj->decrypt($res);
+        return $cryptObj->comDecrypt($res);
     }
 
     /**
@@ -81,14 +81,18 @@ class CryptoJsonResponse extends ResponseAbstract {
         $this->setHeaders();
         // 获取&处理数据
         $dataWrapper = $this->getBody();
+        // 添加签名预置位
+        $dataWrapper['sign'] = '{sign}';
+        // 排序
+        krsort($dataWrapper);
         $this->dataWrapperString = json_encode($dataWrapper);
         // 压缩
-        $compressData = $this->compress($this->compressType, $this->dataWrapperString);
+        // $compressData = $this->compress($this->compressType, $this->dataWrapperString);
         // 加密
         $cryptType = $this->cryptType;
         $cryptClassName = '\\PhpApi\\Crypto\\' . $cryptType;
         $cryptObj = new $cryptClassName();
-        $cryptString = $this->encrypt($cryptObj, $compressData);
+        $cryptString = $this->encrypt($cryptObj, $this->dataWrapperString);
 
         echo ($cryptString);
     }

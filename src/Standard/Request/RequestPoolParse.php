@@ -1,5 +1,5 @@
 <?php
-namespace PhpApi\Standard\Request\Pool;
+namespace PhpApi\Standard\Request;
 
 /**
  * requst 数据池基类
@@ -11,7 +11,7 @@ namespace PhpApi\Standard\Request\Pool;
  * @author Shawn Yu <pggq@outlook.com>
  */
 
-final class PoolParse implements Iterator {
+final class RequestPoolParse implements Iterator {
 
     /**
      * 键
@@ -25,14 +25,14 @@ final class PoolParse implements Iterator {
     protected function __construct() {
         // 不读文件，直接手动配置
         $$this->requestDataObjs = array(
-            new Body(),
-            new ClientInfo(),
-            new CommonHeader(),
-            new HttpWebInfo(),
-            new RequestCookie(),
-            new RequestHeader(),
-            new RequestInfo(),
-            new RequestLine()
+            new Pool\RequestBody(),
+            new Pool\HttpClientInfo(),
+            new Pool\CommonHeader(),
+            new Pool\HttpWebInfo(),
+            new Pool\RequestCookie(),
+            new Pool\RequestHeader(),
+            new Pool\RequestInfo(),
+            new Pool\RequestLine()
         );
     }
 

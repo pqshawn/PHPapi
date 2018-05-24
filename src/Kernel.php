@@ -42,6 +42,7 @@ class Kernel {
 			register_shutdown_function(array('\PhpApi\Exception', 'callRegisteredShutdown'));
 			
 			$router = Di()->router;
+			
 			$routerInstance = $router->load();
 			
 			$routerInstance->dispatch(true);

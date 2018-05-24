@@ -32,9 +32,12 @@ abstract class RequestDataBase {
     protected static $queryStrToArray = [];
 
     /**
-     * @var string contentType
+     * @var string contentType 默认是标准json
      */
     protected $contentType = 'application/json';
+    // config @todo
+    protected $cryptType = 'AesCrypto';
+    protected $compressType = 'ZLIB';
     
 
     protected function __construct() {
@@ -59,7 +62,11 @@ abstract class RequestDataBase {
      * 解析数据池的主要来源
      */
     final function parseServerRequest() {
+        if(!empty(self::$serverRequest)) {
+            return self::$serverRequest;
+        }
         self::$serverRequest = $_SERVER;
+        return $_SERVER;
     }
 
     /**
@@ -68,17 +75,24 @@ abstract class RequestDataBase {
      * @return void
      */
     final function parseBodyData() {
+        if(!empty(self::$bodyData)) {
+            return self::$bodyData;
+        }
+
         if ($this->contentType == 'application/json') {
             // get , post 传来的
             $dataRes = $_REQUEST;
         } else {
-            // 加密传来的
+            // 解析数据
             $data = file_get_contents('php://input');
-            // 解压&解密
-
-            $dataRes = json_decode($data, true);
+            // 解密
+            $cryptType = $this->cryptType;
+            $cryptClassName = '\\PhpApi\\Crypto\\' . $cryptType;
+            $cryptObj = new $cryptClassName();
+            $dataRes = $this->decrypt($cryptObj, $data);
         }
         self::$bodyData = $dataRes;
+        return $dataRes;
     }
 
     /**
@@ -89,6 +103,22 @@ abstract class RequestDataBase {
             parse_str($_SERVER['QUERY_STRING'], self::$queryStrToArray);
         }
     }
+
+    /**
+     * 解密适配
+     */
+    final function decrypt($cryptObj = null, $res = '') {
+        return $cryptObj->comDecrypt($res);
+    }
+
+    final function uncompress($type = 'ZLIB', $res = '') {
+        $result = $res;
+        if ($type == 'ZLIB') {
+            $result = gzuncompress($res);
+        }
+        return $result;
+    }
+
 
 
 }
