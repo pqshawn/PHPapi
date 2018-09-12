@@ -124,7 +124,9 @@ class Filter {
 			}
 			// 如果客户端没值键值，但是后台已做判断，则默认值是空
 			else {
-				$value['data'] = '';
+				// require为假，前台也没传，不再参与整合，unset
+				if (!$value['require']) unset($filerRequest[$key]);
+				else $value['data'] = '';
 			}
 		}		
 	}
