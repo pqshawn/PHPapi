@@ -52,7 +52,6 @@ namespace PhpApi\Crypto;
 	 * AES-128-CBC 对称解密
 	 */
 	public function decrypt($request) {
-
         $decodeRes = base64_decode($request);
 		$ivlen = openssl_cipher_iv_length($this->cipher);
 		
@@ -111,7 +110,7 @@ namespace PhpApi\Crypto;
 	 */
 	public function comDecrypt($request) {
 		$decodeRes = base64_decode($request);
-
+		
 		$decryptReq = openssl_decrypt($decodeRes, $this->cipher, $this->key, OPENSSL_RAW_DATA, $this->iv);
 		$requestArray = json_decode($decryptReq, true);
 
@@ -124,7 +123,6 @@ namespace PhpApi\Crypto;
 		// 还原No sign json & 计算剩下签名正确与否,  注意，Json不要编码Unicode，要加JSON_UNESCAPED_UNICODE
 		$requestArray['sign'] = '{sign}';
 		$calcmac = substr(hash_hmac($this->hashType, $dynamicIv . json_encode($requestArray, JSON_UNESCAPED_UNICODE), $this->key, false), $ivlen);
-		
 		if ($remainHmac == $calcmac)
 		{
 			unset($requestArray['sign']);

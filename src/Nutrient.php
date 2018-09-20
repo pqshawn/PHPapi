@@ -6,8 +6,9 @@
  * @author:Yzwu <Ldos.net>
  * Date:2015/1/3 
  */
+namespace PhpApi;
 
-class NutrientLib {
+class Nutrient {
 
 	public static function mkdir($dirpath) {
 		if(is_dir($dirpath)) 
@@ -23,10 +24,10 @@ class NutrientLib {
 	public static function mkfile($filepath) {
 		$p_arr = explode('/', str_replace('\\', '/', $filepath));
 		if(count($p_arr) > 0) {
-			$rdir_p = strpos($filepath, ROOT_DIR);
+			$rdir_p = strpos($filepath, ROOT);
 			if($rdir_p !== false) {
 				//in case multistep as the ROOT_DIR same
-				$ensure_dir = ROOT_DIR.substr($filepath, strlen(ROOT_DIR));
+				$ensure_dir = ROOT.substr($filepath, strlen(ROOT));
 				$ensure_de = explode('/', $ensure_dir);
 				array_pop($ensure_de);
 				self::mkdir(implode('/', $ensure_de));
@@ -40,7 +41,7 @@ class NutrientLib {
 	public static function setup() {
 		$sql_file_count = 0;
 		$sql_command_count = 0;
-		$install_lock = ROOT_DIR.'/config/slock.php';
+		$install_lock = ROOT.'/config/slock.php';
 		try{
 			if(is_file($install_lock)) {
 				return true;

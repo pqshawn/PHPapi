@@ -85,7 +85,7 @@ class CryptoJsonResponse extends ResponseAbstract {
         $dataWrapper['sign'] = '{sign}';
         // 排序
         krsort($dataWrapper);
-        $this->dataWrapperString = json_encode($dataWrapper);
+        $this->dataWrapperString = json_encode($dataWrapper, JSON_UNESCAPED_UNICODE);
         // 压缩
         // $compressData = $this->compress($this->compressType, $this->dataWrapperString);
         // 加密
