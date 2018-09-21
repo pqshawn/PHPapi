@@ -21,6 +21,8 @@ class Controller extends ControllerAbstract {
      */
 	public static $requestData = [];
 	
+	public $clientInfo = [];
+
 	public $params = [];
 
 	protected $action = '';
@@ -37,6 +39,7 @@ class Controller extends ControllerAbstract {
 		// 处理参数，启动request工厂，接收request值，并反射到requestData上
 		Di()->request->generate();
 		$this->params = isset(self::$requestData['RequestBody'])? self::$requestData['RequestBody'] : [];
+		$this->clientInfo = isset(self::$requestData['HttpClientInfo'])? self::$requestData['HttpClientInfo'] : [];
 
 		self::$requestData = null;
 		// 用户自定义的也需要处理

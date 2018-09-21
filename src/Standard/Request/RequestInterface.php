@@ -58,6 +58,7 @@ interface RequestInterface {
     /**
     * client信息
     *
+    * USER_AGENT
     * REMOTE_PORT
     * REMOTE_ADDR
     */

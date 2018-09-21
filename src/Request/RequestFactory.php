@@ -33,6 +33,7 @@ class RequestFactory implements FactoryInterface {
     public $requestDataObjs = array(
         '\\PhpApi\\Standard\\Request\\Pool\\RequestBody',
         '\\PhpApi\\Standard\\Request\\Pool\\RequestInfo',
+        '\\PhpApi\\Standard\\Request\\Pool\\HttpClientInfo',
     );
 
 	public function __construct() {
@@ -66,7 +67,7 @@ class RequestFactory implements FactoryInterface {
         $flection = new PhpApiReflection();
         $poolIterator = $flection->make($this->poolName);
         // 注入对象
-        $requestDataTypeNames = '';
+        $requestDataTypeNames = [];
         $Di = \PhpApi\Di::single();
         foreach($this->requestDataObjs as $obj) {
             $objStrToArr = explode('\\', $obj);

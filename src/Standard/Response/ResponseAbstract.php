@@ -49,7 +49,6 @@ namespace PhpApi\Standard\Response;
     }
 
     public function setBody($data = [], ...$params) {
-        // @todo request处理 
         $this->data = $data;
 
         // 如有用户自定义语言包，重新计算下
@@ -73,10 +72,10 @@ namespace PhpApi\Standard\Response;
             if (isset($lang[$data['retKey']])) {
                 $this->dataWrapper['msg'] = $lang[$data['retKey']] ;
             }
+            $this->dataWrapper['retKey'] = $data['retKey'];
             unset($data['retKey']);
         }
-
-        $this->dataWrapper['data'] = $data;
+        if (!empty($data)) $this->dataWrapper['data'] = $data;
 
     }
         

@@ -86,11 +86,14 @@ class Config {
     /**
      * 通用加载文件
      */
-    protected function loadConfig($appName = '') {
+    public function loadConfig($appName = '', $tempReturn = false) {
         $configPacket =  $this->configDir . DIRECTORY_SEPARATOR . $appName . '.php';
         if (is_file($configPacket)) {
             // $this->config[$appName] = @include($configPacket);
             $this->appConfig = $this->config[$appName] = @include($configPacket);
+        }
+        if ($tempReturn) {
+            return @include($configPacket);
         }
     }
 

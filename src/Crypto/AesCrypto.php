@@ -21,6 +21,15 @@ namespace PhpApi\Crypto;
 
 	protected $hashType = 'sha256';
 	
+	/**
+	 * 初始化，读配置
+	 */
+	public function __construct() {
+		$configObj = \PhpApi\Di::single()->config;
+		$configApp = $configObj->appConfig;
+		isset($configApp['CryptoAesKey']) && !empty($configApp['CryptoAesKey'])? $this->key = $configApp['CryptoAesKey'] : '';
+		isset($configApp['CryptoAesIv']) && !empty($configApp['CryptoAesIv'])? $this->iv = $configApp['CryptoAesIv'] : '';
+	}
      /**
 	 * 不同content-type不同处理，加密
 	 * AES-128-CBC 对称加密
@@ -118,6 +127,7 @@ namespace PhpApi\Crypto;
 		
 		if ($remainHmac == $calcmac)
 		{
+			unset($requestArray['sign']);
 			return $requestArray;
 		}
 		// return $requestArray;

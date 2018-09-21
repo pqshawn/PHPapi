@@ -83,7 +83,7 @@ class Filter {
      * 请看参照interface里一对非常复杂的多种类型数据完整事例， 实际构造中往往都很简单
 	 */
 	public function filterCombineParams(&$filerRequest, $params, $action) {
-		if (empty($params)) throw new \Exception("Empty Param Or Invalid Json", 1);
+		// if (empty($params)) throw new \Exception("Empty Param Or Invalid Json", 1);
 		$this->filterLayerListCurrent++;
 		if ($this->filterLayerListCurrent > $this->filterLayerListCount) {
 			throw new \Exception("Check Your Data List,Over Deep " . $this->filterLayerListCount, 1);

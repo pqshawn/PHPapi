@@ -88,10 +88,11 @@ abstract class RequestDataBase {
             return self::$bodyData;
         }
         isset($_SERVER['CONTENT_TYPE'])? $this->contentType = $_SERVER['CONTENT_TYPE'] : '';
-        
-        if ($this->contentType == 'application/json') {
+
+        if (strpos($this->contentType, 'application/json') !== false) {
             // get , post 传来的
-            $dataRes = $_REQUEST;
+            $data = file_get_contents('php://input');
+            $dataRes = json_decode($data, true);
         } else {
             // 解析数据
             $data = file_get_contents('php://input');

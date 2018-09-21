@@ -77,7 +77,7 @@ final class Mysqli implements ModelInterface {
 	}
 
 	public function create($sql) {}
-	public function update($sql) {}
+	public function update($data, $where) {}
 	public function retrieve($sql) {}
 	public function delete($sql) {
 
@@ -104,7 +104,6 @@ final class Mysqli implements ModelInterface {
 	public function rollback() {}
 
 	public function quote($string){
-
 		$result = @mysqli_real_escape_string($this->_link_res, $string);
         if(!$result){
             $result = addslashes($string);
@@ -124,5 +123,9 @@ final class Mysqli implements ModelInterface {
 		}
 		$this->_link_res = '';
 		return true;
+	}
+
+	public function format($sql) {
+		
 	}
 }

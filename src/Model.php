@@ -58,10 +58,6 @@ class Model extends ModelFactory {
 		return $res;
 	}
 
-	public function update($sql) {
-
-	}
-
 	/**
 	 * data from Db
 	 * @param string $line 
@@ -71,7 +67,7 @@ class Model extends ModelFactory {
 		$sql = "SELECT {$cols} FROM ".$this->_table;
 		$where = $this->where($where);
 		$order = $this->order($order);
-		// offset,limit 不给默认值，防止误会，但是系统最大值，希望开发者自己设限，防止大表长时间等待
+		// offset,limit 不给默认值，防止误会，但是系统最大值是没关系的，希望开发者自己设限
 		if ($offset >= 0 && $limit > 0) {
 			$lim = " limit {$offset},{$limit}";
 		} elseif ($limit > 0) {
@@ -81,11 +77,6 @@ class Model extends ModelFactory {
 
 		$data = $this->_db->select($sql);
 		return $data;
-	}
-
-
-	public function delete($sql) {
-
 	}
 
 	public function table($table_name = null) {
@@ -102,7 +93,7 @@ class Model extends ModelFactory {
 	public function filter(&$data) {
 		if(is_array($data) && !empty($data)) {
 			foreach($data as $k => &$v) {
-				$v = $this->_db->quote($v);
+				$v = $this->quote($v);
 			}
 			return $data;
 		} else {
@@ -110,40 +101,30 @@ class Model extends ModelFactory {
 		}
 	}
 
-	public function where($where = '') {
+	public function where($where = '', $retObj = 0) {
+		$str = ' WHERE 1 ';
 		if(is_array($where) && !empty($where)) {
 			$where = $this->filter($where);
-			$where_sql = ' WHERE 1 ';
-			$i = 0;
+			$operate = '='; // @todo 扩展操作符
 			foreach($where as $wk => $wv) {
-				$wk_arr = explode('|', $wk);
-				if(isset($wk_arr[0])) $k = $wk_arr[0];
-				if(isset($wk_arr[1])) $o = $wk_arr[1];
-				if(isset($wk_arr[2])) $and_or = strtoupper($wk_arr[2]);
-				$i > 0? (!in_array($and_or, array('AND', 'OR'))? $and_or = 'AND' : '') : $and_or = 'AND';
-				if(isset($k)) {
-					switch ($o) {
-						case 'like':
-							$operate = 'like';
-							$wv = preg_replace('/\'([\s\S]+)\'/', '\'%${1}%\'', $wv);
-							break;
-						
-						default:
-							$operate = '=';
-							break;
-					}
-					$where_sql .= " ".$and_or." `".$k."` ".$operate." ".$wv;
-					$i++;
+				// 默认带上别名
+				$alias = '';
+				if(isset($this->_options['alias']) && $this->_options['alias']) {
+					$alias = $this->_options['alias'] . '.';
 				}
+
+				$str .= " AND ".$alias."`".$wk."` ".$operate." ".$wv;
 			}
-			return $where_sql;
-		} else if(is_string($where)) {
-			//@todo filter preg_match
 		} else {
-			$where = '';
-			//@todo filter other type
+			$str .= $where;
 		}
-		return $where;
+
+		if($retObj == 1) {
+			$this->_options['where'] = $str;
+			return $this;
+		}
+
+		return $str;
 	}
 
 	public function order($orderstr = '') {
@@ -168,6 +149,15 @@ class Model extends ModelFactory {
 		}
 		$ex_res = preg_split("/(?=[A-Z])/", $class_name, 0, PREG_SPLIT_NO_EMPTY);
 		return $ex_res;
+	}
+
+	public function find($cols = '*', $where = '', $order = '', $offset = 0, $limit = -1) {
+		$findRes = $this->retrieve($cols, $where, '', 0, 1);
+		$res = [];
+		if (!empty($findRes)) {
+			$res = $findRes[0];
+		}
+		return $res;
 	}
 
 }

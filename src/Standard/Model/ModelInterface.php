@@ -11,7 +11,7 @@ namespace PhpApi\Standard\Model;
 
 interface ModelInterface {
 	public function create($sql);
-	public function update($sql);
+	public function update($data, $where);
 	public function retrieve($sql);
 	public function delete($sql);
 }
