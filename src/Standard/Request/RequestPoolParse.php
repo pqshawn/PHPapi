@@ -21,17 +21,26 @@ final class RequestPoolParse implements Iterator {
      * @var 各种类型请求对象集合
      */
     protected $requestDataObjs = array();  
+    /**
+     * 把最终值反射到的类，如request工厂类直接需要，就无需再一层调用request车间
+     */
+    protected $reflectObj = null;
 
-    protected function __construct() {
+    /**
+     * params是个未知个数的obj组,这个据顶级类的需要而传参过来
+     * 顶级类传参一批obj组，obj然后通过反射
+     */
+    protected function __construct(Controller $controller) {
+        $this->reflectObj = $controller;
         // 不读文件，直接手动配置
         $$this->requestDataObjs = array(
             new Pool\RequestBody(),
+            new Pool\RequestHeader(),
+            new Pool\RequestInfo(),
             new Pool\HttpClientInfo(),
             new Pool\CommonHeader(),
             new Pool\HttpWebInfo(),
             new Pool\RequestCookie(),
-            new Pool\RequestHeader(),
-            new Pool\RequestInfo(),
             new Pool\RequestLine()
         );
     }
@@ -42,8 +51,8 @@ final class RequestPoolParse implements Iterator {
 
     public function current() {
         $currenObj = $this->requestDataObjs[$this->key];
-        $currenObj->make();
-        $currenObj->reflecteData();
+        $resData = $currenObj->make();
+        $currenObj->reflecteData($this->reflectObj, $resData);
     }
 
     public function key() {

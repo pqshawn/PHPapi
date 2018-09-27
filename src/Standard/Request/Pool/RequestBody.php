@@ -34,8 +34,12 @@ class RequestBody extends RequestDataBase {
     /**
      * 反射数据
      */
-    public function reflecteData() {
+    public function reflecteData(Controller $controller, $resData = []) {
+        if (!empty($resData)) {
+            if (isset($controller::$requestData[__METHOD__])) return;
 
+            $controller::$requestData[__METHOD__] = $resData;
+        }
     }
 
 

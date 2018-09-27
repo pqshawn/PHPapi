@@ -16,7 +16,7 @@ class ResponseFactory implements FactoryInterface {
      * @var $routeMode 默认，标准json传输
      */
 	public $routeMode = 'json';
-	public $routeObj = null;
+    public $routeObj = null;
 
 	public function __construct() {
 		$configObj = \PhpApi\Di::single()->config;

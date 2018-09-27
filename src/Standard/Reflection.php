@@ -1,5 +1,5 @@
 <?php
-namespace PhpApi;
+namespace PhpApi\Standard;
 
 /**
  * reflection 处理类
@@ -17,10 +17,10 @@ namespace PhpApi;
     public $debugSwitch = false;
 
     public function getConfig() {
-        $configObj = Di::single()->config;
-        $configApp = $configObj->config;
-        $appName = $configObj->appName;
-        $config = $configApp[$appName]['Debug'];
+        // $configObj = Di::single()->config;
+        // $configApp = $configObj->config;
+        // $appName = $configObj->appName;
+        // $config = $configApp[$appName]['Debug'];
         
     }
     /**
@@ -29,4 +29,44 @@ namespace PhpApi;
     public function debugSql() {
 
     }
+
+    /**
+     * 构建类的对象
+     * 
+     * @param string $className
+     * 
+     * @param object
+     */
+    public function make($className) {
+        $reflectionClass = new \ReflectionClass($className);
+        $constructor = $reflectionClass->getConstructor();
+        $parameters = $constructor->getParameters();
+        $dependencies = getDependencies($parameters);
+        return $reflectionClass->newInstanceArgs($dependencies);
+    }
+        
+    /**
+     * 递归解析依赖
+     */
+    public function getDependencies($parameters) {
+        $dependencies = [];
+        foreach($parameters as $parameter) {
+            $dependency = $parameter->getClass();
+            if (is_null($dependency)) {
+                if($parameter->isDefaultValueAvailable()) {
+                    $dependencies[] = $parameter->getDefaultValue();
+                } else {
+                    $dependencies[] = '0';
+                }
+            } else {
+                $dependencies[] = make($parameter->getClass()->name);
+            }
+        }
+        return $dependencies;
+    }
+
+
+
+
+
  }

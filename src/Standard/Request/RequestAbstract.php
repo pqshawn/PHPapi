@@ -4,6 +4,7 @@ namespace PhpApi\Standard\Request;
 /**
  * requst 抽象化基类
  * reques the data from pool
+ * pool用反射得到
  * 每个属性都可能对应一个pool里的类，可以在池子里添加更多不同的类别，然后通过反射，把各类的数据反射到RequestAbstract里
  *
  * @copyright (c)Ldos.net All rights reserved.
