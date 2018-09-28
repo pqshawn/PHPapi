@@ -9,14 +9,15 @@
 
     composer require ldos/phpapi
 
-这里有已经封装好的示例项目，可直接下载使用：
+这里有已经封装好的示例项目，可直接下载使用[![PHPapi-Framework](https://img.shields.io/badge/version-1.0-blue)](https://packagist.org/packages/ldos1/phpapi-framework)：
 
     git 下载：
 
     git clone https://github.com/pqshawn/PHPapi-Framework
 
     或者
-    composer安装：
+
+    composer安装： 
 
     composer create-project ldos/phpapi-framework
 
