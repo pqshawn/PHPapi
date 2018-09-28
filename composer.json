@@ -1,6 +1,6 @@
 {
     "name": "ldos/phpapi",
-    "description": "A api framework base on php",
+    "description": "Restful API Architecture Based on PHPapi",
     "license": "BSD-2-Clause",
     "homepage": "https://www.ldos.net/",
     "keywords": [
@@ -18,9 +18,7 @@
     },
     "autoload": {
         "psr-4": {
-            "PhpApi\\":"src/",
-            "App\\":"application/app/",
-            "Ischool\\":"application/ischool/"
+            "PhpApi\\":"src/"
         },
         "files": [
             "src/Helper.php"

@@ -3,6 +3,25 @@
 
 一个基于php语言的api框架-PHPapi（非芭比）
 
+## 安装说明
+
+    composer安装：[![The composer for PHPapi](https://img.shields.io/badge/composer-1.9.3-blue)](https://packagist.org/packages/ldos/phpapi)
+
+    composer require ldos/phpapi
+
+这里有已经封装好的示例项目，可直接下载使用：
+
+    git 下载：
+
+    git clone https://github.com/pqshawn/PHPapi-Framework
+
+    或者
+    composer安装：
+
+    composer create-project ldos/phpapi-framework
+
+
+
 ## 1）说明
 PHPapi是由得道创科工作室开发，基于BSD-2-Clause协议，用户可以放心免费使用，分发或二次开发。免费版本的设计使用文档，后期同步更新出来，以下是缩略的部分信息，方便开发者使用。
 如果想更深入了解本框架，我们并行推出了商业版，得创竭诚为您服务，欢迎联系。
