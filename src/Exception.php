@@ -59,13 +59,12 @@ class Exception {
 		$message = $exception->getMessage();
 		$t = $exception->getTrace();
 		$t_message = $exception->getTraceAsString();
-		
 		if(is_array($t)) {
 			$trace_output = '';
 			foreach ($t as $key => $value) {
 				if($value['file']) $file = basename($value['file']);
-				if(is_array($value['args'])) $args = implode(',', $value['args']);
-				$trace_output .= "<p>#{$key} {$value['class']}{$value['type']}{$value['function']}<span style='color:#062DFB' title='{$args}'>(...)</span><span style='color:#E3E;'>{$file}:{$value['line']}</span></p>";
+				$args = json_encode($value['args']);
+				$trace_output .= "<p>#{$key} {$value['class']}{$value['type']}{$value['function']}<span style='color:#062DFB' title=''>($args)</span><span style='color:#E3E;'>{$file}:{$value['line']}</span></p>";
 			}
 		}
 

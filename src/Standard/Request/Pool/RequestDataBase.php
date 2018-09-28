@@ -12,6 +12,10 @@ namespace PhpApi\Standard\Request\Pool;
  */
 
 abstract class RequestDataBase {
+    /**
+     * @var 当前调用的子类标识key
+     */
+    protected $currentKey = 'Default';
 
     /**
      * @var 池数据的主要来源
@@ -53,15 +57,20 @@ abstract class RequestDataBase {
     /**
      * 反射数据
      */
-    protected function reflecteData() {
+    public function reflecteData(\PhpApi\Controller $controller) {
+        if (!empty($this->requestData)) {
+            $className = $this->currentKey;
+            if (isset($controller::$requestData[$className])) return false;
 
+            $controller::$requestData[$className] = $this->requestData;
+        }
     }
 
 
     /**
      * 解析数据池的主要来源
      */
-    final function parseServerRequest() {
+    final protected function parseServerRequest() {
         if(!empty(self::$serverRequest)) {
             return self::$serverRequest;
         }
@@ -74,7 +83,7 @@ abstract class RequestDataBase {
      * 
      * @return void
      */
-    final function parseBodyData() {
+    final protected function parseBodyData() {
         if(!empty(self::$bodyData)) {
             return self::$bodyData;
         }
@@ -98,7 +107,7 @@ abstract class RequestDataBase {
     /**
      * QUERY_STRING
      */
-    final function parseQueryString() {
+    final protected function parseQueryString() {
         if (isset($_SERVER['QUERY_STRING'])) {
             parse_str($_SERVER['QUERY_STRING'], self::$queryStrToArray);
         }
@@ -107,11 +116,11 @@ abstract class RequestDataBase {
     /**
      * 解密适配
      */
-    final function decrypt($cryptObj = null, $res = '') {
+    final protected function decrypt($cryptObj = null, $res = '') {
         return $cryptObj->comDecrypt($res);
     }
 
-    final function uncompress($type = 'ZLIB', $res = '') {
+    final protected function uncompress($type = 'ZLIB', $res = '') {
         $result = $res;
         if ($type == 'ZLIB') {
             $result = gzuncompress($res);

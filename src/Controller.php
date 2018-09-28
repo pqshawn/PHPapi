@@ -19,10 +19,11 @@ class Controller extends ControllerAbstract {
 	/**
      * @var request 各个数据集合
      */
-    public static $requestData = [];
+	public static $requestData = [];
+	
+	public $params = [];
 
 	public function __construct() {
-		
 		$this->init();
 
 	}
@@ -30,7 +31,8 @@ class Controller extends ControllerAbstract {
 	public function beforeAction() {
 		// 处理参数，启动request工厂，接收request值，并反射到requestData上
 		Di()->request->generate();
-
+		$this->params = isset(self::$requestData['RequestBody'])? self::$requestData['RequestBody'] : [];
+		self::$requestData = null;
 	}
 
 	public function afterAction() {

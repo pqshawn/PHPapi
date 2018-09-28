@@ -136,7 +136,6 @@ abstract class RequestAbstract implements RequestInterface {
      * REQUEST_METHOD
      * REQUEST_TIME
      * PATH_INFO
-     * DOCUMENT_ROOT
      * QUERY_STRING
      */
     public function getRequestInfo() {

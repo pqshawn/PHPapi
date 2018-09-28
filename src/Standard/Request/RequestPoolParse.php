@@ -11,7 +11,7 @@ namespace PhpApi\Standard\Request;
  * @author Shawn Yu <pggq@outlook.com>
  */
 
-final class RequestPoolParse implements Iterator {
+ class RequestPoolParse implements \Iterator {
 
     /**
      * 键
@@ -30,19 +30,20 @@ final class RequestPoolParse implements Iterator {
      * params是个未知个数的obj组,这个据顶级类的需要而传参过来
      * 顶级类传参一批obj组，obj然后通过反射
      */
-    protected function __construct(Controller $controller) {
+    public function __construct(\PhpApi\Controller $controller) {
         $this->reflectObj = $controller;
-        // 不读文件，直接手动配置
-        $$this->requestDataObjs = array(
-            new Pool\RequestBody(),
-            new Pool\RequestHeader(),
-            new Pool\RequestInfo(),
-            new Pool\HttpClientInfo(),
-            new Pool\CommonHeader(),
-            new Pool\HttpWebInfo(),
-            new Pool\RequestCookie(),
-            new Pool\RequestLine()
-        );
+    }
+
+    /**
+     * 添加数据类型
+     */
+    public function addRequestType($requestDataTypeNames = array()) {
+        if (is_array($requestDataTypeNames)) {
+            $Di = \PhpApi\Di::single();
+            foreach ($requestDataTypeNames as $name) {
+                $this->requestDataObjs[] = $Di->$name;
+            }
+        }
     }
 
     public function rewind() {
@@ -50,9 +51,11 @@ final class RequestPoolParse implements Iterator {
     }
 
     public function current() {
-        $currenObj = $this->requestDataObjs[$this->key];
+        $currenStr = $this->requestDataObjs[$this->key];
+        $currenObj = new $currenStr;
         $resData = $currenObj->make();
-        $currenObj->reflecteData($this->reflectObj, $resData);
+        $currenObj->reflecteData($this->reflectObj);
+        return true;
     }
 
     public function key() {
@@ -70,7 +73,8 @@ final class RequestPoolParse implements Iterator {
      * return boolean
      */
     public function valid() {
-        return class_exists($this->requestDataObjs[$this->key]);
+        if (!isset($this->requestDataObjs[$this->key])) return false;
+        return class_exists(get_class($this->requestDataObjs[$this->key]));
     }
 
 }

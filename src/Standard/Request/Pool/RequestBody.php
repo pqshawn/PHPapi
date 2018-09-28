@@ -10,13 +10,21 @@ namespace PhpApi\Standard\Request\Pool;
  */
 
 class RequestBody extends RequestDataBase {
-
+    /**
+     * @var currentKey 在池中的键名key
+     */
+    protected $currentKey = 'RequestBody';
     /**
      * 当前在调用的request顶级类
      */
     protected $requestObj = null;
 
-    protected function __construct() {
+    /**
+     * @var 获取的数据
+     */
+    protected $requestData = '';
+
+    public function __construct() {
 
     }
     /**
@@ -24,23 +32,13 @@ class RequestBody extends RequestDataBase {
      */
     public function make() {
         // 有没有被别类已经运算参数
-        if (empty(self::$bodyData)) {
+        if (empty(parent::$bodyData)) {
             $this->parseBodyData();
         }
-        return self::$bodyData;
+        $this->requestData = parent::$bodyData;
+        return $this->requestData;
     }
 
-
-    /**
-     * 反射数据
-     */
-    public function reflecteData(Controller $controller, $resData = []) {
-        if (!empty($resData)) {
-            if (isset($controller::$requestData[__METHOD__])) return;
-
-            $controller::$requestData[__METHOD__] = $resData;
-        }
-    }
 
 
 

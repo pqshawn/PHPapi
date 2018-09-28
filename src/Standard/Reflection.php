@@ -41,7 +41,7 @@ namespace PhpApi\Standard;
         $reflectionClass = new \ReflectionClass($className);
         $constructor = $reflectionClass->getConstructor();
         $parameters = $constructor->getParameters();
-        $dependencies = getDependencies($parameters);
+        $dependencies = $this->getDependencies($parameters);
         return $reflectionClass->newInstanceArgs($dependencies);
     }
         
@@ -59,7 +59,7 @@ namespace PhpApi\Standard;
                     $dependencies[] = '0';
                 }
             } else {
-                $dependencies[] = make($parameter->getClass()->name);
+                $dependencies[] = $this->make($parameter->getClass()->name);
             }
         }
         return $dependencies;
