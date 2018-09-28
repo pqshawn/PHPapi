@@ -3,9 +3,9 @@
 
 一个基于php语言的api框架-PHPapi（非芭比）
 
-## 安装说明
+## 安装说明 [![The composer for PHPapi](https://img.shields.io/badge/composer-1.9.3-blue)](https://packagist.org/packages/ldos/phpapi)
 
-    composer安装：[![The composer for PHPapi](https://img.shields.io/badge/composer-1.9.3-blue)](https://packagist.org/packages/ldos/phpapi)
+    composer安装：
 
     composer require ldos/phpapi
 
