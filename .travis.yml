@@ -1,0 +1,22 @@
+language: php
+
+php:
+  - 7.1.9
+  - nightly
+
+env:
+  - APP_DEBUG=false
+
+before_install:
+
+install:
+  - composer install --prefer-dist --optimize-autoloader --quiet
+
+notifications:
+
+script:
+  - phpunit -c ./tests/phpunit.xml --coverage-text
+
+after_success:
+
+addons:
