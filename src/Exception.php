@@ -30,7 +30,7 @@ class Exception {
 				break;
 			case E_USER_ERROR:
 				$error_type = 'E_USER_ERROR';
-				throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
+				throw new \ErrorException($errstr, 0, $errno, $errfile, $errline);
 				break;
 			case E_USER_WARNING:
 				$error_type = 'E_USER_WARNING';
@@ -64,28 +64,42 @@ class Exception {
 		$message = $exception->getMessage();
 		$t = $exception->getTrace();
 		$t_message = $exception->getTraceAsString();
+		$data = [];
 		if(is_array($t)) {
 			$trace_output = '';
 			foreach ($t as $key => $value) {
-				if($value['file']) $file = basename($value['file']);
-				$args = json_encode($value['args']);
-				$trace_output .= "<p>#{$key} {$value['class']}{$value['type']}{$value['function']}<span style='color:#062DFB' title=''>($args)</span><span style='color:#E3E;'>{$file}:{$value['line']}</span></p>";
+				$class = isset($value['class'])? $value['class'] : '';
+				$function = isset($value['function'])? $value['function'] : '';
+				$type = isset($value['type'])? $value['type'] : '';
+				$file = isset($value['file'])? $value['file'] : '';
+				$line = isset($value['line'])? $value['line'] : '';
+
+				$data[] = "{$class}{$type}{$function}(...args) from file: {$file} in line {$line}";
+				
 			}
 		}
+		// 先返回，这部分内容要处理进日志,不能返回到端@todo
+		$error = array(
+			'ret' => 0,
+			'msg' => $message,
+			// 'data' => json_encode($data)
+		);
 
-		$output = <<<OUTPUT
-		<!DOCTYPE html>
-		<html>
-			<head>
-				<title>错误异常</title>
-			</head>
-			<body>
-				<h1>$message</h1>
-				<div>$trace_output</div>
-			</body>
-		</html>
-OUTPUT;
-		echo $output;
+		self::exceptionToResponse($error);
+
+// 		$output = <<<OUTPUT
+// 		<!DOCTYPE html>
+// 		<html>
+// 			<head>
+// 				<title>错误异常</title>
+// 			</head>
+// 			<body>
+// 				<h1>$message</h1>
+// 				<div>$trace_output</div>
+// 			</body>
+// 		</html>
+// OUTPUT;
+// 		echo $output;
 		exit;
 	}
 
