@@ -17,6 +17,7 @@ abstract class ModelFactory implements FactoryInterface, ModelInterface {
 	private $_db_driver = '';
 	public $_db_prefix = '';
 	public $_db = '';
+	public $alias = '';
 	public function __construct($confDb = array()) {
 		$this->load($confDb);
 	}
@@ -26,7 +27,17 @@ abstract class ModelFactory implements FactoryInterface, ModelInterface {
 		if (isset($confDb['type'])) {
 			$this->_db_driver = $dbDriver = $confDb['type'];
 			$db_driver = ucfirst($dbDriver);
-			Di::single()->$dbDriver = "\\PhpApi\\Dao\\{$db_driver}";
+
+			$alias = isset($confDb['alias'])? $confDb['alias'] : $dbDriver;
+
+			// check 某引擎（可能有同引擎不同库的情况，对象也是不同的）对象已经建立，则不需要再重新加载
+			$this->alias = $alias;
+			// 一定要赋值到类属性_db
+			if (is_object($this->_db = Di::single()->$alias)) {
+				return true;
+			}
+
+			Di::single()->$alias = "\\PhpApi\\Dao\\{$db_driver}";
 		} else {
 			$this->_db_driver = 'mysqli';
 			Di::single()->mysqli = "\\PhpApi\\Dao\\Mysqli";
@@ -45,8 +56,8 @@ abstract class ModelFactory implements FactoryInterface, ModelInterface {
 	}
 
 	public function router() {
-		$dbDriver = $this->_db_driver;
-		return Di::single()->$dbDriver;
+		$alias = empty($this->alias)? $this->_db_driver : $this->alias;
+		return Di::single()->$alias;
 	}
 
 	public function create($sql) {

@@ -39,7 +39,8 @@ abstract class DependenceIn implements ArrayAccess {
      * @return void
      */
     public function set($key, $val) {
-        if (!isset($this->source[$key])) {
+        // 1.第一种情况，不存在， 2.第二种情况，之前get后是空的
+        if (!isset($this->source[$key]) || empty($this->source[$key])) {
             $this->source[$key] = $val;
             $this->hitCount[$key] = 0;
         }
@@ -55,7 +56,7 @@ abstract class DependenceIn implements ArrayAccess {
             $this->hitCount[$key] = 0;
         }
         if ($this->hitCount[$key] == 0) {
-            $this->source[$key] = $this->initService($this->source[$key]);
+            $this->source[$key] = $this->initService($this->source[$key], $key);
         }
         $this->hitCount[$key]++;
 
@@ -67,7 +68,7 @@ abstract class DependenceIn implements ArrayAccess {
      * @param mixed $data
      * @return mixed
      */
-    public function initService($serviceVal = '') {
+    public function initService($serviceVal = '', $key) {
         $service = '';
         if (is_string($serviceVal) && class_exists($serviceVal)) {
             $service =  new $serviceVal();

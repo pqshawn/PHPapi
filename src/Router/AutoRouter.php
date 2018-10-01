@@ -55,7 +55,7 @@ class AutoRouter extends RouterAbstract {
         $actionName = $this->mapper['action'];
 
         if (class_exists($controllerName)) {
-            $controller = new $controllerName();
+            $controller = new $controllerName($actionName);
         } else {
             trigger_error('ControllerName is not exist!');
         }

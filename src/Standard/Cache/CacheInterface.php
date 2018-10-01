@@ -1,16 +1,17 @@
 <?php
-namespace PhpApi\Standard;
+namespace PhpApi\Standard\Cache;
 
 
 /**
- * 缓存类
- * 处理缓存的支持类
+ * 缓存接口
+
+ * 处理缓存的支持类规范
  * 
  * @copyright (c)Ldos.net All rights reserved.
  * @author:Shawn Yu <pggq@outlook.com>
  */
 
- interface Cache {
+ interface CacheInterface {
 
     /**
      * 获取缓存
@@ -33,8 +34,8 @@ namespace PhpApi\Standard;
     /**
      * 删除缓存
      * 
-     * @param string $key
+     * @param ... $keys
      * @return boolean
      */
-    public function delete($key);
+    public function delete(...$keys);
  }

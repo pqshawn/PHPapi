@@ -48,6 +48,11 @@ class Exception {
 			'msg' => $message,
 			'error_type' => "{$errno} - {$error_type}"
 		);
+
+		self::exceptionToResponse($error);
+    }
+
+    public static function exceptionToResponse($error = array()) {
 		$Di = \PhpApi\Di::single();
 		$Di->response = '\\PhpApi\\Response\\ResponseFactory';
 		$Di::single()->response->setBody($error, []);

@@ -23,16 +23,21 @@ class Controller extends ControllerAbstract {
 	
 	public $params = [];
 
-	public function __construct() {
+	public function __construct($actionName = '') {
 		$this->init();
-
+		$this->initialize($actionName);
 	}
 
 	public function beforeAction() {
 		// 处理参数，启动request工厂，接收request值，并反射到requestData上
 		Di()->request->generate();
 		$this->params = isset(self::$requestData['RequestBody'])? self::$requestData['RequestBody'] : [];
+
 		self::$requestData = null;
+		// 用户自定义的也需要处理
+		if (method_exists($this, 'beforeUserAction') ) {
+			$this->beforeUserAction();
+		}
 	}
 
 	public function afterAction() {
@@ -51,6 +56,13 @@ class Controller extends ControllerAbstract {
 		// $this->modelConf();
 		
 	}
+
+	/**
+	 * 用户自定义初始化
+	 */
+	protected function initialize($actionName = '')
+    {}
+
 
 	/**
 	 * Model配置
