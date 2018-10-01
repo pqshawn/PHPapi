@@ -115,6 +115,7 @@ namespace PhpApi\Crypto;
 		// 还原No sign json & 计算剩下签名正确与否
 		$requestArray['sign'] = '{sign}';
 		$calcmac = substr(hash_hmac($this->hashType, $dynamicIv . json_encode($requestArray), $this->key, false), $ivlen);
+		
 		if ($remainHmac == $calcmac)
 		{
 			return $requestArray;

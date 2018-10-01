@@ -87,6 +87,7 @@ abstract class RequestDataBase {
         if(!empty(self::$bodyData)) {
             return self::$bodyData;
         }
+        isset($_SERVER['CONTENT_TYPE'])? $this->contentType = $_SERVER['CONTENT_TYPE'] : '';
 
         if ($this->contentType == 'application/json') {
             // get , post 传来的
@@ -117,6 +118,8 @@ abstract class RequestDataBase {
      * 解密适配
      */
     final protected function decrypt($cryptObj = null, $res = '') {
+        // 注意加密解密的iv可能会变动，客户端如果headers里传Authentication，则用此当iv
+
         return $cryptObj->comDecrypt($res);
     }
 
