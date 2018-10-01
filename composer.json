@@ -1,6 +1,6 @@
 {
     "name": "ldos/phpapi",
-    "description": "Restful API Architecture Based on PHPapi",
+    "description": "Restful API Architecture Based on PHP",
     "license": "BSD-2-Clause",
     "homepage": "https://www.ldos.net/",
     "keywords": [
