@@ -1,0 +1,24 @@
+{
+    "name": "ldos/phpapi",
+    "description": "A api framework base on php",
+    "type": "project",
+    "license": "BSD-2-Clause",
+    "authors": [
+        {
+            "name": "shawn Yu",
+            "email": "pqshawn@outlook.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+    	"php": ">=7.0.25"
+    },
+    "autoload": {
+        "psr-4": {
+            "apiTest\\":"src/"
+        }
+    },
+    "config": {
+        "secure-http": false
+    }
+}
