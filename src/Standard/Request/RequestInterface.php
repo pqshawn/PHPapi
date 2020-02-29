@@ -1,5 +1,5 @@
 <?php
-namespace PhpApi\Standard;
+namespace PhpApi\Standard\Request;
 
 /**
  * requst 规范化基类
@@ -9,9 +9,12 @@ namespace PhpApi\Standard;
  * @author: Shawn Yu <pggq@outlook.com>
  */
 
-class Request {
+class RequestInterface {
+    
+    /**
+     * 获取头部
+     */
     
 }
-
 
 
