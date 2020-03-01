@@ -1,17 +1,20 @@
 <?php
-namespace PhpApi\Factory;
+namespace PhpApi\Router;
+
+use PhpApi\Router\Auto;
 
 /**
  * router factory
+ * 暂不固定，实现Auto即可
  * 
  * @copyright (c)Ldos.net All rights reserved.
  * @author:Shawn Yu <pggq@outlook.com>
 */
 
-class Frouter {
+class RouterFactory {
 
 	/**
-	 * router模式：Auto,Dot,Pathinfo
+	 * router模式：默认Auto,Dot,Pathinfo
 	 */
 	public $routeMode = 'Auto';
 	public $routeObj = null;
@@ -33,23 +36,19 @@ class Frouter {
 
 	public function load() {
 		$routeObjName = ucfirst(strtolower($this->routeMode));
-		if(class_exists($routeObjName)) {
-			$this->routeObj = new $this->routeObj();
+		$className = '\\PhpApi\\Router\\'.$routeObjName;
+		if (class_exists($className)) {
+			$this->routeObj = new $className();
 		}
 
 		return $this->routeObj;
 	}
 
-	public function dispatch() {
-		$mapper = $this->routeObj->mapper;
-		
-		Di::single()->controller = $mapper['controller'];
-
-
-		if (class_exists($mapper['controller'])) {
-			
+	public function dispatch($retData = false) {
+		$result = $this->routeObj->dispatch();
+		if ($retData) {
+			return $result;
 		}
-
 
 		// //$this->_response->sendhttphead();
 		// $response = $this->_response->get_body();

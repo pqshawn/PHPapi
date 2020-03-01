@@ -21,7 +21,7 @@ require PHPAPI_ROOT.'/../vendor/autoload.php';
  */
 Di::single()->request = '\\PhpApi\\Request';
 Di::single()->response = '\\PhpApi\\Response';
-// Di()->router = '\\PhpApi\\Router';
+Di::single()->router = '\\PhpApi\\Router\\RouterFactory';
 // Di()->exception = '\\PhaApi\\Exception';
 // Di()->requestRule = '\\PhaApi\\Request\\Rule';
 // /**

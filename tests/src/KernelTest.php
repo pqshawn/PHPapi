@@ -1,8 +1,8 @@
 <?php
 namespace PhpApi\Tests;
 
-use PHPUnit\Framework\TestCase;
 use PhpApi\Kernel;
+
 /**
  * 主启动类
  * kernel启动
@@ -11,7 +11,7 @@ use PhpApi\Kernel;
  * @author:Shawn Yu <pggq@outlook.com>
  */
 
-class KernelTest extends TestCase {
+class KernelTest extends \PHPUnit\Framework\TestCase {
 
     protected $kernel = null;
     
@@ -81,10 +81,39 @@ class KernelTest extends TestCase {
     public function testRequest() {
         $request = \PhpApi\Di::single()->request;
         $this->expectOutputRegex('/"ret":200/');
-        $s $request->get_param
         // fwrite(STDOUT,print_R($request, true). "\n");
 
     }
+
+
+
+    /**
+     * @group router
+     * 
+     * test router默认路径测试app.v1.Test->get
+     */
+    public function testRouter() {
+        $router = \PhpApi\Di::single()->router;
+        $routerInstance = $router->load();
+        $parseUrl = null;
+        $parseHasKey = 'controller';
+        $className = '\\PhpApi\\Router\\'.$router->routeMode;
+        $subSet = array('title' => 'test1');
+
+        // 判断类对象的建立
+        $this->assertInstanceOf($className, $routerInstance);
+
+        // 解析路由
+        $parseUrl = $routerInstance->parse();
+        $this->assertArrayHasKey($parseHasKey, $parseUrl);
+        
+        // dispatch
+        $ret = $routerInstance->dispatch(true);
+        $this->assertArraySubset($subSet, $ret);
+    }
+
+
+
 
 
     /**

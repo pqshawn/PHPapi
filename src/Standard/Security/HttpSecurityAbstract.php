@@ -12,6 +12,17 @@ namespace PhpApi\Standard\Security;
 abstract class HttpSecurityAbstract {
     
     /**
+     * ssl
+     * 
+     * 先释义，框架部分处理不到
+     * 
+     * http表示层+ssl = https
+     * http+加密+认证+完整性保护 = https
+     */
+    abstract protected function ssl();
+
+    
+    /**
      * sniffer
     * PacketCapture，Sniffer,ettercap
     * Wireshark,findler...etc

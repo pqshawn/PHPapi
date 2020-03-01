@@ -18,13 +18,14 @@
     },
     "autoload": {
         "psr-4": {
-            "PhpApi\\":"src/"
+            "PhpApi\\":"src/",
+            "App\\": "application/app/"
         },
         "files": [
             "src/Helper.php"
         ]
     },
     "config": {
-        "secure-http": false
+        "secure-http": true
     }
 }

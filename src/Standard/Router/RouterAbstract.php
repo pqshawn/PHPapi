@@ -22,49 +22,47 @@ abstract class RouterAbstract implements RouterInterface{
      * }
      */
     protected $mapper = [
-        'namespace' => 'App',
-        'controller' => 'Test',
+        'namespace' => 'app',
+        'controller' => 'v1/Test',
         'action' => 'get',
-        'getParam' => '',
-        'mode' => 'Auto',
     ];
-
+    // 当前路由的模式
+    protected $currentMode = '';
 
     /**
      * 解析路由
      * 解析出controller action  如果有param，加上param
-     * view-source:http://192.168.1.37/app/v1/news/add?gewew=gew3
-     * view-source:http://192.168.1.37/app.v1.news.dw.dsw?gewew=gew3
+     * view-source:http://192.168.1.37/app/v1/News/add?gewew=gew3
+     * view-source:http://192.168.1.37/app.v1.News.Dw.dsw?gewew=gew3
      * 
      * @param void
      * @return void
      */
-    protected function parse() {
+    public function parse() {
         $match = array(); // 捕获1
         $mapperRes = '';
         // 不管是dot还是pathinfo统一解析出相应参数
-        $noIndexUri = str_replace('/index.php', '', $_SERVER['REQUEST_URI']);
+        if (isset($_SERVER['REQUEST_URI'])) {
+            $requestUri = $_SERVER['REQUEST_URI'];
+        } else {
+            return $this->mapper;
+        }
+        $noIndexUri = str_replace('/index.php', '', $requestUri);
         $matchRes = preg_match('/([\.\/a-zA-Z0-9\-\_]+)\\?{0,1}/', $noIndexUri, $match);
-
         $mapperArray = [];
         if ($matchRes !== false && isset($match[1])) {
             $mapperRes = ltrim($match[1], '/');
             $mapperArray = preg_split("/[\.\/]/", $mapperRes);
-            // ucfirst 
-            array_walk($mapperArray, $this->routerUcfirst);
+            array_walk($mapperArray, array($this, 'routerUcfirst'));
         }
-
-        // get namespace and action
         if(count($mapperArray) > 2) {
             $this->mapper['namespace'] = array_unshift($mapperArray);
             $this->mapper['action'] =array_pop($mapperArray);
         }
         // controller
-        $this->mapper['namespace'] = $this->mapper['namespace'] . implode('\\', $mapperArray);
-        // getParam
+        $this->mapper['controller'] = $this->mapper['namespace'] . implode('\\', $mapperArray);
         $this->mapper['getParam'] = isset($_SERVER['QUERY_STRING'])? $_SERVER['QUERY_STRING'] : '';
-        // mode
-        $this->mapper['mode'] = $this->mode();
+        $this->currentMode = $this->mode();
     }
 
     /**
@@ -81,7 +79,7 @@ abstract class RouterAbstract implements RouterInterface{
     /**
      * 路由转向
      */
-	abstract protected function dispatch();
+	abstract public function dispatch();
 	
 	
 	

@@ -10,10 +10,7 @@ namespace PhpApi\Standard\Router;
  * @author:Yzwu <Ldos.net>
  */
 
-class Pathinfo extends RouterAbstract {
-
-	protected $mapper = [];
-  
+class Pathinfo extends RouterAbstract {  
     
     /**
      * 模式
