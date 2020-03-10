@@ -10,7 +10,7 @@ namespace PhpApi\Standard\Router;
  * @author:Yzwu <Ldos.net>
  */
 
-class Pathinfo extends RouterAbstract {  
+class PathinfoRouter extends RouterAbstract {  
     
     /**
      * 模式

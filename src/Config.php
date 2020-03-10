@@ -59,6 +59,11 @@ class Config {
     public $config = [];
 
     /**
+     * 当前App配置
+     */
+    public $appConfig = [];
+
+    /**
      * 统一配置
      */
     public function main($appName) {
@@ -76,7 +81,8 @@ class Config {
     protected function loadConfig($appName = '') {
         $configPacket =  $this->configDir . DIRECTORY_SEPARATOR . $appName . '.php';
         if (is_file($configPacket)) {
-            $this->config[$appName] = @include($configPacket);
+            // $this->config[$appName] = @include($configPacket);
+            $this->appConfig = $this->config[$appName] = @include($configPacket);
         }
     }
 

@@ -11,7 +11,7 @@ use PhpApi\Standard\Router\RouterAbstract;
  * @author:Yzwu <Ldos.net>
  */
 
-class Auto extends RouterAbstract {
+class AutoRouter extends RouterAbstract {
     
     /**
      * 模式

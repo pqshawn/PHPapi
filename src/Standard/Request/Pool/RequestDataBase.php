@@ -16,20 +16,20 @@ abstract class RequestDataBase {
     /**
      * @var 池数据的主要来源
      */
-    protected $serverRequest = [];
+    protected static $serverRequest = [];
 
     /**
      * @var 主体数据
      * 可能会有加密解密，根据content-type判断类型执行不同操作
      */
-    protected $bodyData = [];
+    protected static $bodyData = [];
 
     /**
      * @var QUERY_STRING的解析
      * 主要针对两种数据：1.REQUEST_METHOD为get类型,把get的数据拼接进url
      * 2.针对url添加的类型参数，如post请求，但时间戳，分页参数放进url里
      */
-    protected $queryStrToArray = [];
+    protected static $queryStrToArray = [];
 
     /**
      * @var string contentType
@@ -37,9 +37,11 @@ abstract class RequestDataBase {
     protected $contentType = 'application/json';
     
 
-    public function __construct() {
+    protected function __construct() {
 
     }
+
+
     /**
      * 处理数据
      */
@@ -57,23 +59,35 @@ abstract class RequestDataBase {
      * 解析数据池的主要来源
      */
     final function parseServerRequest() {
-
+        self::$serverRequest = $_SERVER;
     }
 
     /**
      * 解析body
      * 
-     * @return array $dataRes
+     * @return void
      */
     final function parseBodyData() {
         if ($this->contentType == 'application/json') {
-            // get , post 
+            // get , post 传来的
             $dataRes = $_REQUEST;
         } else {
+            // 加密传来的
             $data = file_get_contents('php://input');
+            // 解压&解密
+
             $dataRes = json_decode($data, true);
         }
-        return $dataRes;
+        self::$bodyData = $dataRes;
+    }
+
+    /**
+     * QUERY_STRING
+     */
+    final function parseQueryString() {
+        if (isset($_SERVER['QUERY_STRING'])) {
+            parse_str($_SERVER['QUERY_STRING'], self::$queryStrToArray);
+        }
     }
 
 

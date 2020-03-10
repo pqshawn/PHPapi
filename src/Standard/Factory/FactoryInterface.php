@@ -9,5 +9,6 @@ namespace PhpApi\Standard\Factory;
  */
 
 interface FactoryInterface {
-	public function router();
+	
+	public function load();
 }

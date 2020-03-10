@@ -2,6 +2,7 @@
 namespace PhpApi\Router;
 
 use PhpApi\Router\Auto;
+use PhpApi\Standard\Factory\FactoryInterface;
 
 /**
  * router factory
@@ -11,7 +12,7 @@ use PhpApi\Router\Auto;
  * @author:Shawn Yu <pggq@outlook.com>
 */
 
-class RouterFactory {
+class RouterFactory implements FactoryInterface {
 
 	/**
 	 * router模式：默认Auto,Dot,Pathinfo
@@ -22,21 +23,18 @@ class RouterFactory {
 	public $response = '';
 
 	public function __construct() {
-		if(defined('URL_MODEL')) {
-			// config 类 @todo
-			// $urlMode = URL_MODEL;
-			// $this->urlMode = $urlMode;
+		$configObj = \PhpApi\Di::single()->config;
+		$configApp = $configObj->appConfig;
+		if (isset($configApp['RouteType']) && !empty($configApp['RouteType'])) {
+			$this->routeMode = $configApp['RouteType'];
 		}
-		
-		// $this->_request = Blood::single('library\RequestLib');
-		// $this->_response = Blood::single('library\ResponseLib');
 	}
 
 	public function __desctruct() {}
 
 	public function load() {
 		$routeObjName = ucfirst(strtolower($this->routeMode));
-		$className = '\\PhpApi\\Router\\'.$routeObjName;
+		$className = '\\PhpApi\\Router\\' . $routeObjName . 'Router';
 		if (class_exists($className)) {
 			$this->routeObj = new $className();
 		}

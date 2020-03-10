@@ -3,7 +3,7 @@ namespace PhpApi;
 
 use PhpApi\Standard\Controller\ControllerAbstract;
 use PhpApi\Standard\Middleware\MiddlewareTraits;
-use PhpApi\Di;
+
 /**
  * base controllers
  * 
@@ -37,9 +37,9 @@ class Controller extends ControllerAbstract {
 	 */
 	public function init() {
 		// 前面有确切的实例化，建议直接调用对象
-		Di::single()->request = '\\PhpApi\\Request';
-		Di::single()->response = '\\PhpApi\\Response';
-		Di::single()->model = '\\PhpApi\\Model';
+		Di()->request = '\\PhpApi\\Request';
+		Di()->response = '\\PhpApi\\Response\\ResponseFactory';
+		Di()->model = '\\PhpApi\\Model';
 		// 取消model配置，每个controller不一定要model操作
 		// $this->modelConf();
 	}
@@ -58,9 +58,9 @@ class Controller extends ControllerAbstract {
 	public function output($data = []) 
 	{	
 		// 前面有确切的实例化，建议直接调用对象
-		Di::single()->response->setBody($data, []);
+		Di()->response->setBody($data, []);
 		// response处理
-		Di::single()->response->output();
+		Di()->response->output();
 	}
 
 

@@ -17,7 +17,7 @@ class Kernel {
 	private static $_single_obj = array();
 
 	public function __construct() {
-		\PhpApi\Di::single()->router = '\\PhpApi\\Router\\RouterFactory';
+		Di()->router = '\\PhpApi\\Router\\RouterFactory';
 	}
 
 	/**
@@ -28,8 +28,8 @@ class Kernel {
 	 * @return void
 	 */
 	public static function config($configDir = '', $appName = 'App') {
-		\PhpApi\Di::single()->config = new \PhpApi\Config($configDir);
-		\PhpApi\Di::single()->config->main($appName);
+		Di()->config = new \PhpApi\Config($configDir);
+		Di()->config->main($appName);
 	}
 
 
@@ -41,7 +41,7 @@ class Kernel {
 			set_error_handler(array('\PhpApi\Exception', 'user_error_handler'));
 			register_shutdown_function(array('\PhpApi\Exception', 'callRegisteredShutdown'));
 			
-			$router = \PhpApi\Di::single()->router;
+			$router = Di()->router;
 			$routerInstance = $router->load();
 			
 			$routerInstance->dispatch(true);

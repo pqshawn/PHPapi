@@ -19,7 +19,7 @@ class Model extends ModelFactory {
 	public $_table = '';
 	public function __construct($ori = false, $config = array()) {
 		try {
-			$this->init($ori, $config);
+			$this->load($ori, $config);
 		} catch (Exception $e) {
 			trigger_error($e.message, E_USER_ERROR);
 		}
@@ -29,21 +29,19 @@ class Model extends ModelFactory {
 	/**
 	 * model 手动初始化
 	 */
-	public function init($ori = false, $config = array()) {
+	public function load($ori = false, $config = array()) {
 		if (empty($config)) {
 			// 加载配置
 			$configObj = Di::single()->config;
-			$configApp = $configObj->config;
-			$appName = $configObj->appName;
+			$configApp = $configObj->appConfig;
 			// 更多扩展，更多支持 @todo
-			if (isset($configApp[$appName]['Db']['Master'])) {
-				$config = $configApp[$appName]['Db']['Master'];
+			if (isset($configApp['Db']['Master'])) {
+				$config = $configApp['Db']['Master'];
 			} else {
-				
 				return new Exception('Error config for DB!'); 
 			}
 		}
-		parent::init($config);
+		parent::load($config);
 		// 自动计算表名
 		if(!$ori) {
 			$this->_table = $this->table();

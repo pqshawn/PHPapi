@@ -9,7 +9,7 @@ namespace PhpApi\Standard\Router;
  * @author:Shawn Yu <pggq@outlook.com>
  */
 
-abstract class RouterAbstract implements RouterInterface{
+abstract class RouterAbstract implements RouterInterface {
 
     /**
      * 提供一个正常可以解析的mapper
