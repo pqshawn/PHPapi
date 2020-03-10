@@ -1,5 +1,5 @@
 <?php
-namespace PhpApi\Crypt;
+namespace PhpApi\Crypto;
 
 /**
  * AES 对称加密
@@ -10,7 +10,7 @@ namespace PhpApi\Crypt;
  */
 
 
- class AesCrypt {
+ class AesCrypto {
 
     protected $cipher = 'AES-128-CBC';
 

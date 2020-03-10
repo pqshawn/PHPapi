@@ -11,11 +11,11 @@ use PhpApi\Standard\Response\ResponseAbstract;
  */
 
 
-class CryptJsonResponse extends ResponseAbstract {
+class CryptoJsonResponse extends ResponseAbstract {
 
-    protected $contentType = 'application/crypt-json';
+    protected $contentType = 'application/crypto-json';
 
-    protected $cryptType = 'AesCrypt';
+    protected $cryptType = 'AesCrypto';
     /**
      * @var 默认压缩
      */
@@ -77,17 +77,20 @@ class CryptJsonResponse extends ResponseAbstract {
     }
        
     public function output() {
+        // 设置头
+        $this->setHeaders();
+        // 获取&处理数据
         $dataWrapper = $this->getBody();
         $this->dataWrapperString = json_encode($dataWrapper);
+        // 压缩
+        $compressData = $this->compress($this->compressType, $this->dataWrapperString);
         // 加密
         $cryptType = $this->cryptType;
-        $cryptClassName = '\\PhpApi\\Crypt\\' . $cryptType;
+        $cryptClassName = '\\PhpApi\\Crypto\\' . $cryptType;
         $cryptObj = new $cryptClassName();
-        $cryptString = $this->encrypt($cryptObj, $this->dataWrapperString);
-        
-        // 压缩
-        $result = $this->compress($this->compressType, $cryptString);
-        echo ($result);
+        $cryptString = $this->encrypt($cryptObj, $compressData);
+
+        echo ($cryptString);
     }
 
  }

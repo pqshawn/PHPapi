@@ -1,5 +1,5 @@
 <?php
-namespace PhpApi\Crypt;
+namespace PhpApi\Crypto;
 
 /**
  * RSA 非对称加密
@@ -10,6 +10,6 @@ namespace PhpApi\Crypt;
  */
 
 
- class RsaCrypt {
+ class RsaCrypto {
 
  }

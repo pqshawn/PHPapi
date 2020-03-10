@@ -49,7 +49,7 @@ class Exception {
 			'error_type' => "{$errno} - {$error_type}"
 		);
 		$Di = \PhpApi\Di::single();
-		$Di->response = '\\PhpApi\\Response';
+		$Di->response = '\\PhpApi\\Response\\ResponseFactory';
 		$Di::single()->response->setBody($error, []);
 		$Di::single()->response->output();
 		exit;

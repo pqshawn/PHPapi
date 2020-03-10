@@ -43,11 +43,20 @@ class ResponseFactory implements FactoryInterface {
      * 创建body
      */
     public function setBody($data, ...$params) {
-        $this->routeObj->setBody($data);
+        if (method_exists($this->routeObj, 'setBody')) {
+            $this->routeObj->setBody($data);
+        } else {
+            trigger_error('ROUTER ERROR! Please check your config<ContentType> or uri!');
+        }
+        
     }
 
 	public function output() {
-		$this->routeObj->output();
+        if (method_exists($this->routeObj, 'output')) {
+            $this->routeObj->output();
+        } else {
+            trigger_error('ROUTER ERROR! Please check your config<ContentType> or uri!');
+        }
 	}
 
  }
