@@ -7,7 +7,7 @@ use PHPUnit\Extensions\Database\DataSet\ArrayDataSet;
 
 class DbTest extends \PHPUnit\Framework\TestCase
 {
-    use TestCaseTrait;
+    // use TestCaseTrait;
 
     /**
     * 以数组格式建立数据库基境 
