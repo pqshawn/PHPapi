@@ -1,5 +1,5 @@
 # PHPapi
-[![PHPapi-version](https://img.shields.io/badge/version-1.0-blue)]()
+[![PHPapi-version](https://img.shields.io/badge/version-1.0-blue)]() [![Build Status](https://travis-ci.org/pqshawn/PHPapi.svg?branch=master)](https://travis-ci.org/pqshawn/PHPapi)
 
 一个基于php语言的api框架-PHPapi（非芭比）
 
