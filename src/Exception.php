@@ -42,10 +42,10 @@ class Exception {
 			default:
 				$error_type = 'UNKOWN_ERORR_TYPE';
 				break;
-		}		
+		}
 		
 		$error = array(
-			'ret' => 10002,
+			'ret' => 0,
 			'msg' => $message,
 			'error_type' => "{$errno} - {$error_type}"
 		);
@@ -62,6 +62,7 @@ class Exception {
     }
     
     public static function user_exception_handle($exception) {
+		$code = $exception->getCode();
 		$message = $exception->getMessage();
 		$t = $exception->getTrace();
 		$t_message = $exception->getTraceAsString();
@@ -79,10 +80,15 @@ class Exception {
 				
 			}
 		}
-		// 先返回，这部分内容要处理进日志,不能返回到端@todo
+		// 部分内容要处理进日志,不能返回到端@todo
+		// 如果用户自定义了错误了，返回用户自定义的message和ret
+		$configObj = \PhpApi\Di::single()->config;
+		$curAppStatus = $configObj->codeStatus[$configObj->appName];
+		$statusKey = array_search($code, $configObj->sysCodeStatus);
 		$error = array(
-			'ret' => $exception->getCode(),
-			'msg' => $message,
+			'ret' => ($statusKey !== false && isset($curAppStatus[$statusKey]))? $curAppStatus[$statusKey]: $code,
+			'msg' => isset($configObj->lang[$statusKey])? $configObj->lang[$statusKey]: $message,
+			'dev_msg' => $message, // 开发人员预留备用
 			// 'data' => json_encode($data)
 		);
 

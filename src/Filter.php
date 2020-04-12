@@ -15,7 +15,7 @@ class Filter {
 	protected $filterLayerListCount = 3;
 	protected $filterLayerListCurrent = 0; // 当前最大层数
 	// 数组最大层数，
-	protected $filterLayerArrayCount = 3;
+	protected $filterLayerArrayCount = 4;
 
 	private $configCommandsObj = [
 		'\PhpApi\Filter\Commands\RequireCommand',
@@ -55,7 +55,6 @@ class Filter {
 		}
 
 		$this->recursionRunEachCommand($chainObj, $data);
-
 	}
 
 	/**
@@ -84,10 +83,10 @@ class Filter {
      * 请看参照interface里一对非常复杂的多种类型数据完整事例， 实际构造中往往都很简单
 	 */
 	public function filterCombineParams(&$filerRequest, $params, $action) {
-		if (empty($params)) throw new \Exception("Empty Param Or Invalid Json", 10001);
+		if (empty($params)) throw new \Exception("Empty Param Or Invalid Json", 1);
 		$this->filterLayerListCurrent++;
 		if ($this->filterLayerListCurrent > $this->filterLayerListCount) {
-			throw new \Exception("Check Your Data List,Over Deep " . $this->filterLayerListCount, 10001);
+			throw new \Exception("Check Your Data List,Over Deep " . $this->filterLayerListCount, 1);
 		}
 		$actionName = lcfirst($action); // @todo 方法名全局小驼峰
 
@@ -95,7 +94,7 @@ class Filter {
 		if (empty($filerRequest)) return true;
 		foreach ($filerRequest as $key => &$value) {
 			if (in_array($key, $this->reservedWords)) {
-				throw new \Exception("Error Processing Request For Reserved Words As Name", 10001);
+				throw new \Exception("Error Processing Request For Reserved Words As Name", 1);
 			}
 			if (isset($params[$key])) {
 				// 普通情况直接赋值
@@ -195,9 +194,9 @@ class Filter {
 	public function filterCombineArray($arrayName, $filterRule, $data, $parentRule, &$arrayToList) {
 		// 组合成list的每个条目的名称前缀
 		$listNamePrefix = $arrayName . '/';
-		$layerArrayCurrent = count(explode('/', $listNamePrefix)) - 2;
+		$layerArrayCurrent = count(explode('/', $listNamePrefix)) - 1;
 		if ($layerArrayCurrent > $this->filterLayerArrayCount) {
-			throw new \Exception("Check Your Data Array,Over Deep " . $this->filterLayerArrayCount, 10001);
+			throw new \Exception("Check Your Data Array,Over Deep " . $this->filterLayerArrayCount, 1);
 		}
 
 		if (!empty($data)) {

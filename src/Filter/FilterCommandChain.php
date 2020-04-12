@@ -35,7 +35,7 @@ class FilterCommandChain {
 				// 普通处理
 				$res = $comObj->check($dataName, $data, $typeData);
 				// 及时抛出异常，不在继续处理
-				if(!$res) throw new \Exception($comObj->retErrorMessageTpl, 10001); // 系统错误码@todo
+				if(!$res) throw new \Exception($comObj->retErrorMessageTpl, 2);
 			}
 		}
 	}

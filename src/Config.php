@@ -48,7 +48,15 @@ class Config {
      * 错误码
      */
     public $codeStatus = [
+    ];
+
+    /**
+     * 系统码（预留），用户可覆盖
+     */
+    public $sysCodeStatus = [
         'EXCEPTION' => 0,
+        'SYSTEM_WARNING_FOR_PARAMS' => 1, // 系统警告，对于一些参数可能影响系统，或不符合系统要求（面向开发人员）
+        'CUSTOMER_WARNING_FOR_PARAMS' => 2, // 需要用户自定义的警告，可以展示到前台（面向客户）
         'SUCCESS' => 200,
         'NO_METHOD' => 404,
     ];
