@@ -57,7 +57,7 @@ class AutoRouter extends RouterAbstract {
         if (class_exists($controllerName)) {
             $controller = new $controllerName($actionName);
         } else {
-            trigger_error('ControllerName is not exist!');
+            trigger_error('ControllerName is not exist!', E_USER_NOTICE);
         }
         
         if (!method_exists($controller, $actionName) || !is_callable(array($controller, $actionName))) {

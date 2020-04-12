@@ -18,9 +18,9 @@ Class Scheduler
      */
     public function __construct()
     {
-        /* 原理就是维护了一个队列，
-         * 前面说过，从编程角度上看，协程的思想本质上就是控制流的主动让出（yield）和恢复（resume）机制
-         * */
+        /* 
+         * 维护列队SplQueue
+         */
         $this->taskQueue = new SplQueue();
     }
 
@@ -57,10 +57,10 @@ Class Scheduler
         while (!$this->taskQueue->isEmpty()) {
             // 任务出队
             $task = $this->taskQueue->dequeue();
-            $res = $task->run(); // 运行任务直到 yield
+            $res = $task->run();
 
             if (!$task->isFinished()) {
-                $this->schedule($task); // 任务如果还没完全执行完毕，入队等下次执行
+                $this->schedule($task);
             }
         }
     }

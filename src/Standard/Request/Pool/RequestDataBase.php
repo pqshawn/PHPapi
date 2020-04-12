@@ -88,7 +88,7 @@ abstract class RequestDataBase {
             return self::$bodyData;
         }
         isset($_SERVER['CONTENT_TYPE'])? $this->contentType = $_SERVER['CONTENT_TYPE'] : '';
-
+        
         if ($this->contentType == 'application/json') {
             // get , post 传来的
             $dataRes = $_REQUEST;

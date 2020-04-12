@@ -23,9 +23,14 @@ class Controller extends ControllerAbstract {
 	
 	public $params = [];
 
+	protected $action = '';
+
+	protected $filerRequest = [];
+
 	public function __construct($actionName = '') {
 		$this->init();
 		$this->initialize($actionName);
+		$this->action = $actionName;
 	}
 
 	public function beforeAction() {
@@ -38,10 +43,22 @@ class Controller extends ControllerAbstract {
 		if (method_exists($this, 'beforeUserAction') ) {
 			$this->beforeUserAction();
 		}
+		// 过滤检测参数（根据用户自定义规则）
+		$this->filerRequest();
 	}
 
 	public function afterAction() {
 		
+	}
+
+	/**
+	 * 拦截，不合规则的参数
+	 */
+	public function filerRequest() {
+		$filerRequest = $this->filerRequest;
+		Di()->filter->filterCombineParams($filerRequest, $this->params, $this->action);
+		// 开始执行
+		Di()->filter->start($filerRequest);
 	}
 
 	/**
@@ -54,6 +71,7 @@ class Controller extends ControllerAbstract {
 		Di()->model = '\\PhpApi\\Model';
 		// 取消model配置，每个controller不一定要model操作
 		// $this->modelConf();
+		Di()->filter = '\\PhpApi\\Filter';
 		
 	}
 

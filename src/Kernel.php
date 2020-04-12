@@ -37,19 +37,24 @@ class Kernel {
 	 * 分发器
 	 */
 	public static function dispatch() {
+		// xhprof_enable(XHPROF_FLAGS_CPU + XHPROF_FLAGS_MEMORY);
 		try{
 			set_error_handler(array('\PhpApi\Exception', 'user_error_handler'));
 			register_shutdown_function(array('\PhpApi\Exception', 'callRegisteredShutdown'));
-			
+
 			$router = Di()->router;
 			
 			$routerInstance = $router->load();
 			
 			$routerInstance->dispatch(true);
-			
 		} catch (\Exception $e) {
 			\PhpApi\Exception::user_exception_handle($e);
 		}
+		// $data = xhprof_disable();
+		// include_once "/data/www/xhprof/xhprof_lib/utils/xhprof_lib.php";
+		// include_once "/data/www/xhprof/xhprof_lib/utils/xhprof_runs.php";
+		// $objXhprofRun = new \XHProfRuns_Default(); 
+		// $objXhprofRun->save_run($data, "xhprof");
 	}
 	
 	/**

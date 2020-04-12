@@ -112,14 +112,15 @@ namespace PhpApi\Crypto;
 		$dynamicIv = substr($sign, 0, $ivlen);
 		$remainHmac = substr($sign, $ivlen);
 
-		// 还原No sign json & 计算剩下签名正确与否
+		// 还原No sign json & 计算剩下签名正确与否,  注意，Json不要编码Unicode，要加JSON_UNESCAPED_UNICODE
 		$requestArray['sign'] = '{sign}';
-		$calcmac = substr(hash_hmac($this->hashType, $dynamicIv . json_encode($requestArray), $this->key, false), $ivlen);
+		$calcmac = substr(hash_hmac($this->hashType, $dynamicIv . json_encode($requestArray, JSON_UNESCAPED_UNICODE), $this->key, false), $ivlen);
 		
 		if ($remainHmac == $calcmac)
 		{
 			return $requestArray;
-        }
+		}
+		// return $requestArray;
 
         return false;
 	}

@@ -1,5 +1,5 @@
 <?php
-namespace PhpApi\Interfaces;
+namespace PhpApi\Standard;
 
 
 /**

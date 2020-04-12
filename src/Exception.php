@@ -15,9 +15,10 @@ class Exception {
 		if(!(error_reporting() & $errno)) {
 			return;
 		}
-		
 		$error_type = '';
-		$message = sprintf("(%s)%s in %s on line %s", $errno, $errstr, $errfile, $errline);
+		$exNames = explode('/', $errfile);
+		$fileName = array_pop($exNames);
+		$message = sprintf("(%s)%s in %s on line %s", $errno, $errstr, $fileName, $errline);
 		switch($errno) {
 			case E_WARNING:
 				$error_type = 'E_WARNING';
@@ -44,7 +45,7 @@ class Exception {
 		}		
 		
 		$error = array(
-			'ret' => 0,
+			'ret' => 10002,
 			'msg' => $message,
 			'error_type' => "{$errno} - {$error_type}"
 		);
@@ -80,7 +81,7 @@ class Exception {
 		}
 		// 先返回，这部分内容要处理进日志,不能返回到端@todo
 		$error = array(
-			'ret' => 0,
+			'ret' => $exception->getCode(),
 			'msg' => $message,
 			// 'data' => json_encode($data)
 		);
