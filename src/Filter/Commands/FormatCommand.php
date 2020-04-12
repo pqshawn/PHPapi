@@ -16,7 +16,7 @@ class FormatCommand extends FilterAbstract {
     public $commandType = 'format';
 
     // 支持的类型数据格式
-    protected $typeItems = ['version', 'numletter', 'int'];
+    protected $typeItems = ['version', 'numletter', 'int', 'phone'];
 
     /**
      * 检查后台传的Type值
@@ -42,6 +42,11 @@ class FormatCommand extends FilterAbstract {
 
     protected function checkInt($data) {
         $pattern = '/^\d+$/';
+        return $this->checkPattern($pattern, $data);
+    }
+
+    protected function checkPhone($data) {
+        $pattern = '/^1(\d){10}$/';
         return $this->checkPattern($pattern, $data);
     }
 
