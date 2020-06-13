@@ -93,4 +93,4 @@ request模块采用[反射+注入+迭代模式]，方便业务层扩展极其复
 也可以选择，数据安全级别较高：HTTPS传输+令牌+对称加密(端生成deskey登陆告知server),
 Api提供签名认证，客户端可以根据需要对每个返回指令进行签名认证
 ### 2-19) 性能测试
-![avatar](http://47.103.102.63/Public/Images/callgraph.png)
+![avatar](http://47.103.102.63:8088/temp/oss/callgraph.png)
